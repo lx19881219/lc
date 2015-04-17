@@ -98,7 +98,11 @@ class solution:
 	    if target == arr[i] + arr[j]:
 		return [i, j]
 	return None 
+    """
+    Given two binary trees, write a function to check if they are equal or not.
 
+    Two binary trees are considered equal if they are structurally identical and the nodes have the same value. 
+    """
     def same_tree(self, root1, root2):
 	#recursively
 	if root1 == None and root2 == None:
@@ -109,10 +113,37 @@ class solution:
 	    return False
 	if root1.val != root2.val:
 	    return False'''
-	if root1 and root2 and root1.val == root2.val:
-	    print 'c3', root1.val
-	    return  self.same_tree(root1.left, root2.left) and self.same_tree(root1.right, root2.left)
+	if root1 and root2:
+	    if root1.val == root2.val:
+	        print 'c3', root1.val
+	        return  self.same_tree(root1.left, root2.left) and self.same_tree(root1.right, root2.right)
 	return False
+
+    """ 
+    Say you have an array for which the ith element is the price of a given stock on day i.
+
+    Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+    """
+
+    def max_profit(self, arr):
+	if not arr or len(arr) == 1:
+	    return 0
+	profit = 0
+	for i in xrange(1, len(arr)):
+	    if arr[i] > arr[i-1]:
+		profit += arr[i] - arr[i-1]
+	return profit
+
+    """
+    Write a function that takes an unsigned integer and returns the number of ’1' bits it has (also known as the Hamming weight).
+
+    For example, the 32-bit integer ’11' has binary representation 00000000000000000000000000001011, so the function should return 3.
+
+    Credits:
+    Special thanks to @ts for adding this problem and creating all test cases.
+    """
+    def num_of_1_bits(self, number):
+	
 
     def print_result(self, function, src, res):
         print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -165,3 +196,7 @@ if __name__ == "__main__":
     solution().print_tree(root1)
     result4 = solution().same_tree(root, root1)
     solution().print_result('Same Tree', 0, result4)
+
+    arr = [2, 5, 1, 8, 2, 1, 4]
+    result5 = solution().max_profit(arr)
+    solution().print_result('Best Profit', arr, result5)
