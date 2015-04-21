@@ -134,16 +134,42 @@ class solution:
 		profit += arr[i] - arr[i-1]
 	return profit
 
-    """
-    Write a function that takes an unsigned integer and returns the number of ’1' bits it has (also known as the Hamming weight).
+    def num_of_1_bits(self, num):
+	res = 0
+	count = 0
+	while num > 0:
+	    count += num & 1
+	    num >>= 1
+	return count
 
-    For example, the 32-bit integer ’11' has binary representation 00000000000000000000000000001011, so the function should return 3.
-
-    Credits:
-    Special thanks to @ts for adding this problem and creating all test cases.
     """
-    def num_of_1_bits(self, number):
-	
+    Given a column title as appear in an Excel sheet, return its corresponding column number.
+
+    For example:
+
+    A -> 1
+    B -> 2
+    C -> 3
+    ...
+    Z -> 26
+    AA -> 27
+    AB -> 28 
+    """
+
+    def excel_sheet_col_num(self, string):
+	res = 0
+	for c in string:
+	    if c.isalpha(): #check if a char is a letter
+	        res *= 26 
+	        res += ord(c.upper()) - ord('A') + 1 #return an integer representing the Unicode code point of the character, ord('a') = 97
+	    else:
+		return None
+	return res
+
+    """
+    
+    """
+
 
     def print_result(self, function, src, res):
         print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -160,9 +186,11 @@ class solution:
     
 if __name__ == "__main__":
 
+    s = solution()
+
     arr = [1,2,3,4,2,1,3]
-    result1 = solution().single_number_dict(arr)
-    solution().print_result('Single Number', arr, result1)
+    result1 = s.single_number_dict(arr)
+    s.print_result('Single Number', arr, result1)
 
     root = tnode(0)
     n1 = root.insert_left(3)
@@ -178,13 +206,13 @@ if __name__ == "__main__":
 	     1
 	
     """
-    solution().print_tree(root)
-    result2 = solution().max_depth_iter(root)
-    solution().print_result('Max Depth', root.val, result2)
+    s.print_tree(root)
+    result2 = s.max_depth_iter(root)
+    s.print_result('Max Depth', root.val, result2)
 
     arr = [1,5,8,12,24]
-    result3 = solution().two_sum_ii(arr, 17)
-    solution().print_result('Two Sum II', arr, result3)
+    result3 = s.two_sum_ii(arr, 17)
+    s.print_result('Two Sum II', arr, result3)
 
     root1 = tnode(0)
     n7 = root1.insert_left(3)
@@ -193,10 +221,18 @@ if __name__ == "__main__":
     n10 = n7.insert_right(9)
     n11 = n10.insert_left(1)
     n12 = n8.insert_left(2)
-    solution().print_tree(root1)
-    result4 = solution().same_tree(root, root1)
-    solution().print_result('Same Tree', 0, result4)
+    s.print_tree(root1)
+    result4 = s.same_tree(root, root1)
+    s.print_result('Same Tree', 0, result4)
 
     arr = [2, 5, 1, 8, 2, 1, 4]
-    result5 = solution().max_profit(arr)
-    solution().print_result('Best Profit', arr, result5)
+    result5 = s.max_profit(arr)
+    s.print_result('Best Profit', arr, result5)
+
+    number = 11
+    result6 = s.num_of_1_bits(number)
+    s.print_result('Num of One Bit', number, result6)
+
+    string = 'ab'
+    result7 = s.excel_sheet_col_num(string)
+    s.print_result('Excel Sheet Column Number', string, result7)
