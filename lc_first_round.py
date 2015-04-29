@@ -64,7 +64,36 @@ class solution:
 	    cur = cur.nxt    
 	if flag == 1:
 	    cur.nxt = lnode(1)
-	return head.nxt	
+	return head.nxt
+
+    """
+    Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
+    """
+    def longest_substring(self, string):
+	d = {}
+	res = 0
+	for i in xrange(len(string)):
+	    if string[i] in d:
+		distance = i - d[string[i]]
+		if distance > res:
+		    res = distance
+	    d[string[i]] = i
+	return res
+
+    """
+    There are two sorted arrays nums1 and nums2 of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+    """
+    def getMedian(nums1, nums2, k):
+	
+
+    def medianOfSorted(self, nums1, nums2):
+	m = len(nums1)
+	n = len(nums2)
+	if (m+n) % 2 == 1:
+	    return (self.getMedian(nums1, nums2, (m+n)/2) + self.getMedian(nums1, nums2, (m+n)/2+1)/2
+	else:
+	    return self.getMedian(nums1, nums2, (m+n)/2)
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 
@@ -89,3 +118,7 @@ if __name__ == "__main__":
     result2 = s.addTwoNums(ln1, ln4)
     lnode().print_list(result2)
     
+    string = 'abcabcbb'
+    #string = ''
+    result3 = s.longest_substring(string)
+    s.p('Longest Substring', string, result3)
