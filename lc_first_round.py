@@ -83,16 +83,36 @@ class solution:
     """
     There are two sorted arrays nums1 and nums2 of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
     """
-    def getMedian(nums1, nums2, k):
-	
+    def getMedian(self, nums1, nums2, k):
+	l1 = len(nums1)
+	l2 = len(nums2)
+	if l1 > l2:
+	    return self.getMedian(nums2, nums1, k)
+	if l1 == 0:
+	    return nums2[k-1]
+	if k == 1:
+	    return min(nums1[0], nums2[1])
+	p1 = min(k/2, l1)
+	p2 = k - p1
+	if nums1[p1-1] <= nums2[p2-1]:
+	    return self.getMedian(nums1[p1:], nums2, k-p1)
+	else:
+	    return self.getMedian(nums1, nums2[p2:], k-p2)
+	    	
 
     def medianOfSorted(self, nums1, nums2):
 	m = len(nums1)
 	n = len(nums2)
 	if (m+n) % 2 == 1:
-	    return (self.getMedian(nums1, nums2, (m+n)/2) + self.getMedian(nums1, nums2, (m+n)/2+1)/2
+	    return (self.getMedian(nums1, nums2, (m+n)/2) + self.getMedian(nums1, nums2, (m+n)/2+1))/2
 	else:
 	    return self.getMedian(nums1, nums2, (m+n)/2)
+
+    """
+    Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
+    """
+    def longestPalindromic(self, string):
+	 
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -122,3 +142,8 @@ if __name__ == "__main__":
     #string = ''
     result3 = s.longest_substring(string)
     s.p('Longest Substring', string, result3)
+
+    nums1 = [1,3,7]
+    nums2 = [2,4,6,8]
+    result4 = s.medianOfSorted(nums1, nums2)
+    s.p('Median of two sorted array', nums1+nums2, result4)
