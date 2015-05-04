@@ -111,8 +111,44 @@ class solution:
     """
     Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
     """
+    def getPalindromic(self, string, l, r):
+	while l >= 0 and r < len(string) and string[l] == string[r]:
+	    l -= 1
+	    r += 1
+	return string[l+1:r]
+
     def longestPalindromic(self, string):
-	 
+	start = 0
+	end = 0
+	res = ''
+	for i in xrange(len(string)):
+	    if i<len(string)-1 and string[i] == string[i+1]:
+		sub = self.getPalindromic(string, i, i+1)
+	    else:
+		sub = self.getPalindromic(string, i, i)
+	    if len(sub) > len(res):
+		res = sub
+	return res
+
+    """
+     The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+
+And then read line by line: "PAHNAPLSIIGYIR"
+
+Write the code that will take a string and make this conversion given a number of rows:
+
+string convert(string text, int nRows);
+
+convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR". 
+    """
+    def zigzag(self, string, nRows):
+	for i in xrange(len(string)):
+	    for r in xrange(nRows):
+	        
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -147,3 +183,7 @@ if __name__ == "__main__":
     nums2 = [2,4,6,8]
     result4 = s.medianOfSorted(nums1, nums2)
     s.p('Median of two sorted array', nums1+nums2, result4)
+
+    string = 'abaabbaabcbaabcdcba'
+    result5 = s.longestPalindromic(string)
+    s.p('Longest Palindromic Substring', string, result5)
