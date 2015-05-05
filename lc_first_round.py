@@ -1,3 +1,5 @@
+import sys
+ 
 class lnode:
 
     def __init__(self, value=None):
@@ -133,23 +135,71 @@ class solution:
     """
      The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
 
-P   A   H   N
-A P L S I I G
-Y   I   R
+    P   A   H   N
+    A P L S I I G
+    Y   I   R
 
-And then read line by line: "PAHNAPLSIIGYIR"
+    And then read line by line: "PAHNAPLSIIGYIR"
 
-Write the code that will take a string and make this conversion given a number of rows:
+    Write the code that will take a string and make this conversion given a number of rows:
 
-string convert(string text, int nRows);
+    string convert(string text, int nRows);
 
-convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR". 
+    convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR". 
     """
     def zigzag(self, string, nRows):
-	for i in xrange(len(string)):
-	    for r in xrange(nRows):
-	        
+	return 'Confused'
 
+    """
+    Reverse digits of an integer.
+
+    Example1: x = 123, return 321
+    Example2: x = -123, return -321
+    """
+    def reverseInt(self, n):
+	if n < 0:
+	    flag = -1
+	else:
+	    flag = 1
+	x = abs(n)
+	res = 0
+	while x>0:
+	    res = res*10 + x%10
+	    x/=10
+	if res > 2**31-1: #Consider overflow in other languages, Integer.MAX_VALUE in java
+	    return 0
+	else:
+	    return flag*res
+
+    """
+    Implement atoi to convert a string to an integer.
+ 
+    Hint: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.
+
+    Notes: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front.    
+    """
+    def atoi(self, string):
+	l = len(string)
+	INT_MAX = 2**31-1
+	sign = 1
+	flag = True
+	res = 0
+	for i in xrange(l):
+	    if string[i].isspace():
+		continue
+	    elif string[i] == '+' and flag:
+		flag = False
+	    elif string[i] == '-' and flag:
+		sign = -1
+		flag = False
+	    elif string[i].isdigit():
+		res = res*10 + int(string[i])%10
+	        if res > INT_MAX:
+		    return 0
+	    else:
+		break
+	return sign*res	        
+		
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 
@@ -187,3 +237,16 @@ if __name__ == "__main__":
     string = 'abaabbaabcbaabcdcba'
     result5 = s.longestPalindromic(string)
     s.p('Longest Palindromic Substring', string, result5)
+
+    string = 'paypalishiring'
+    n=3
+    result6 = s.zigzag(string, n)
+    s.p('Zigzag', string, result6)
+
+    n = 1534236469
+    result7 = s.reverseInt(n)
+    s.p('Reverse Integer', n, result7)
+
+    string = '    -126489'
+    result8 = s.atoi(string)
+    s.p('atoi', string, result8)
