@@ -199,7 +199,44 @@ class solution:
 	    else:
 		break
 	return sign*res	        
+
+    """
+    Determine whether an integer is a palindrome. Do this without extra space.
+    """
+    def palindromeNumber(self, num):
+	# All negative number consider False
+	if num < 0:
+	    return False
+	# Don't neet to consider overflow
+	origin = num
+	new = num % 10
+	num = num / 10
+	while num != 0:
+	    new = new * 10 + num % 10
+	    num /= 10
+	return new == origin
 		
+    """
+    '.' Matches any single character.
+    '*' Matches zero or more of the preceding element.
+
+    The matching should cover the entire input string (not partial).
+
+    The function prototype should be:
+        bool isMatch(const char *s, const char *p)
+
+        Some examples:
+            isMatch("aa","a") → false
+            isMatch("aa","aa") → true
+            isMatch("aaa","aa") → false
+            isMatch("aa", "a*") → true
+            isMatch("aa", ".*") → true
+            isMatch("ab", ".*") → true
+            isMatch("aab", "c*a*b") → true
+    """
+    def isMatch(self, s, p):
+
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 
@@ -250,3 +287,7 @@ if __name__ == "__main__":
     string = '    -126489'
     result8 = s.atoi(string)
     s.p('atoi', string, result8)
+
+    num = 123454321
+    result9 = s.palindromeNumber(num)
+    s.p('Palindrome Number', num, str(result9))
