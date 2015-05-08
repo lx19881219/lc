@@ -226,16 +226,68 @@ class solution:
         bool isMatch(const char *s, const char *p)
 
         Some examples:
-            isMatch("aa","a") → false
-            isMatch("aa","aa") → true
-            isMatch("aaa","aa") → false
-            isMatch("aa", "a*") → true
-            isMatch("aa", ".*") → true
-            isMatch("ab", ".*") → true
-            isMatch("aab", "c*a*b") → true
+            isMatch("aa","a") false
+            isMatch("aa","aa") true
+            isMatch("aaa","aa") false
+            isMatch("aa", "a*") true
+            isMatch("aa", ".*") true
+            isMatch("ab", ".*") true
+            isMatch("aab", "c*a*b") true
     """
     def isMatch(self, s, p):
+        #use DP, a two-demension array to store the result (e. dp[i+1][j+1] for s[i] and p[j])
+        dp = [[False for i in xrange(len(p)+1)] for j in xrange(len(s)+1)] 
+        dp[0][0] = True
+        for j in range(1, len(p)+1):
+            if p[j-1] == '*':
+                if j > 1:
+                    dp[0][j] = dp[0][j-2]
+        for i in range(1, len(s)+1):
+            for j in range(1, len(p)+1):
+                if p[j-1] == '.':
+                    dp[i][j] = dp[i-1][j-1]
+                elif p[j-1] == '*':
+                    dp[i][j] = dp[i][j-1] or dp[i][j-2] or (dp[i-1][j] and (s[i-1] == p[j-2] or p[j-2] == '.'))
+                else:
+                    dp[i][j] = dp[i-1][j-1] and s[i-1] == p[j-1]
+        return dp[len(s)][len(p)]
 
+    """
+    Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+
+    Note: You may not slant the container.
+    """
+    def maxArea(self, height):
+        if len(height) < 2:
+            return 0
+        l = 0
+        r = len(height) - 1
+        res = 0
+        while l < r:
+            area = min(height[l], height[r])*(r-l)
+            res = area if area > res else res
+            if height[l] > height[r]:
+                r -= 1
+            else:
+                l += 1
+        return res
+    
+    """
+    Given an integer, convert it to a roman numeral.
+
+    Input is guaranteed to be within the range from 1 to 3999.
+    """
+    def intToRoman(self, num):
+        if num < 1:
+            return None
+        values = [ 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 ]
+        numerals = [ "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" ]
+        res = ''
+        for i in xrange(len(values)):
+            while num >= values[i]:
+                num -= values[i]
+                res += numerals[i]
+        return res
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -291,3 +343,16 @@ if __name__ == "__main__":
     num = 123454321
     result9 = s.palindromeNumber(num)
     s.p('Palindrome Number', num, str(result9))
+
+    ori = 'aab'
+    sec = 'c*a*b'
+    result10 = s.isMatch(ori, sec)
+    s.p('Regular Expression Match', (ori,';', sec), 'Match' if result10 else 'Dont Match')
+
+    height = [3,7,2,7,9,5,5]
+    result11 = s.maxArea(height)
+    s.p('Container with most water', height, result11)
+    
+    num = 3591
+    result12 = s.intToRoman(num)
+    s.p('Int to Roman', num, result12)
