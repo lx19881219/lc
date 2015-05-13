@@ -289,6 +289,44 @@ class solution:
                 res += numerals[i]
         return res
 
+    """
+    Given a roman numeral, convert it to an integer.
+
+    Input is guaranteed to be within the range from 1 to 3999.
+    """
+    def romanToInt(self, s):
+        d = {"M": 1000,  "D": 500, "C": 100, "L": 50, "X": 10, "V": 5 , "I":1}
+        res = 0
+        pre = 0
+        i = len(s)-1
+        while i>=0:
+            if s[i] in d:
+                if d[s[i]] < pre:
+                    res -= d[s[i]]
+                else:
+                    res += d[s[i]]
+                pre = d[s[i]]
+            else:
+                return 0
+            i -= 1
+        return res
+    """
+    Write a function to find the longest common prefix string amongst an array of strings.
+    """
+    def longestCommonPrefix(self, strs):
+        if len(strs) == 0:
+            return ''
+        res = list(strs[0])
+        for i in xrange(len(strs)):
+            curr = []
+            for j in xrange(min(len(res), len(strs[i]))):
+                if strs[i][j] == res[j]:
+                    curr.append(strs[i][j])
+                else:
+                    break
+            res = curr
+        return ''.join(res)
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 
@@ -356,3 +394,11 @@ if __name__ == "__main__":
     num = 3591
     result12 = s.intToRoman(num)
     s.p('Int to Roman', num, result12)
+
+    string = 'XCIX'
+    result13 = s.romanToInt(string)
+    s.p('Roman To Int', string, result13)
+
+    strs = ['aca', 'acba']
+    result14 = s.longestCommonPrefix(strs)
+    s.p('Longest Common Prefix', strs, result14)
