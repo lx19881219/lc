@@ -388,7 +388,31 @@ class solution:
     A mapping of digit to letters (just like on the telephone buttons) is given below.
     """
     def letterCombination(self, digits):
-        
+	#digits = list(digits)
+	def dfs(index, string, res):
+            if index == len(digits):
+		res.append(string)
+		print res
+		return
+	    if digits[index] in digitMap:
+	        for i in digitMap[digits[index]]:
+		    #string.append(i)
+		    dfs(index+1, string+i, res)
+	    else:
+		return ''	    
+    	digitMap = {
+	    '2':['a','b','c'],
+            '3':['d','e','f'],
+            '4':['g','h','i'],
+            '5':['j','k','l'],
+            '6':['m','n','o'],
+            '7':['p','q','r','s'],
+            '8':['t','u','v'],
+            '9':['w','x','y','z']
+        }
+	res = []
+	dfs(0, '', res)
+	return res    	    
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -473,3 +497,7 @@ if __name__ == "__main__":
     nums = [-1, 2, 1, -4]
     result16 = s.threeSumClosest(nums, 1)
     s.p('Three Sum Closest', nums, result16)
+
+    digits = '23'
+    result17 = s.letterCombination(digits)
+    s.p('Letter Combination', digits, result17)
