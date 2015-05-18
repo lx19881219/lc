@@ -327,6 +327,69 @@ class solution:
             res = curr
         return ''.join(res)
 
+    """
+    Given an array S of n integers, are there elements a, b, c in S such that 
+    a + b + c = 0? Find all unique triplets in the array which gives the sum of zero. 
+    """
+    def threeSum(self, nums):
+        n = len(nums)
+        if n < 3:
+            return []
+        nums.sort()
+        res = []
+        for i in xrange(len(nums)-1):
+            left = i + 1
+            right = len(nums)-1
+            while(left<right):
+                val = nums[i] + nums[left] + nums[right]
+                if val == 0 and [nums[i], nums[left], nums[right]] not in res:
+                    res.append([nums[i], nums[left], nums[right]])
+                    left += 1
+                    right -=1
+                elif (val<0):
+                    left += 1
+                else:
+                    right -= 1
+        return res
+            
+    """
+    Given an array S of n integers, find three integers in S such that 
+    the sum is closest to a given number, target. 
+    Return the sum of the three integers. 
+    You may assume that each input would have exactly one solution.
+    """
+    def threeSumClosest(self, nums, target):
+        n = len(nums)
+        if n < 3:
+            return None
+        nums.sort()
+        mindiff = abs(nums[0]+nums[1]+nums[2] - target)
+        res = nums[0]+nums[1]+nums[2]
+        for i in xrange(n-1):
+            left = i + 1
+            right = n - 1
+            while left < right:
+                s = nums[i]+nums[left]+nums[right]
+                diff = abs(s-target)
+                if diff == 0:
+                    return s
+                elif s < target:
+                    left += 1
+                else:
+                    right -= 1
+                if diff < mindiff:
+                    mindiff = diff
+                    res = s
+        return res
+
+    """
+    Given a digit string, return all possible letter combinations that the number could represent.
+
+    A mapping of digit to letters (just like on the telephone buttons) is given below.
+    """
+    def letterCombination(self, digits):
+        
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 
@@ -402,3 +465,11 @@ if __name__ == "__main__":
     strs = ['aca', 'acba']
     result14 = s.longestCommonPrefix(strs)
     s.p('Longest Common Prefix', strs, result14)
+
+    nums = [-1, 0, 1, 2, -1, -4]
+    result15 = s.threeSum(nums)
+    s.p('Three Sum', nums, result15)
+
+    nums = [-1, 2, 1, -4]
+    result16 = s.threeSumClosest(nums, 1)
+    s.p('Three Sum Closest', nums, result16)
