@@ -414,6 +414,30 @@ class solution:
 	dfs(0, '', res)
 	return res    	    
 
+    """
+    Given an array S of n integers, are there elements a, b, c, and d in S such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
+
+    Note:
+    """
+    def fourSum(self, nums, target):
+	nums.sort()
+	twoSum = {}
+	res = set()
+	length = len(nums)
+	if length < 4:
+	    return None
+	for i in xrange(length):
+	    for j in xrange(i+1, length):
+	        twoSum[(i, j)] = nums[i] + nums[j]
+	left = i + 1
+	right = length - 1
+	for i in xrange(length):
+	    for j in xrange(i+1, length):
+	    	for key in twoSum.keys():
+		    if i not in key and j not in key and nums[i] + nums[j] + twoSum[key] == target:	
+		        res.add(set([nums[i], nums[j], nums[key[0]], nums[key[1]]]))    
+	return [list(i) for i in res] 
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 
@@ -501,3 +525,7 @@ if __name__ == "__main__":
     digits = '23'
     result17 = s.letterCombination(digits)
     s.p('Letter Combination', digits, result17)
+
+    nums = [1, 0, -1, 0, -2, 2]
+    result18 = s.fourSum(nums, 0)
+    s.p('Four Sum', nums, result18)
