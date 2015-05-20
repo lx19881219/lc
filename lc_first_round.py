@@ -426,17 +426,39 @@ class solution:
 	length = len(nums)
 	if length < 4:
 	    return None
+	# using a dict to store sum of every two element
 	for i in xrange(length):
 	    for j in xrange(i+1, length):
-	        twoSum[(i, j)] = nums[i] + nums[j]
-	left = i + 1
-	right = length - 1
+		s = nums[i] + nums[j]
+		if s in twoSum:
+		    twoSum[s].append((i, j))
+		else:
+	       	    twoSum[s] = [(i, j)]
 	for i in xrange(length):
 	    for j in xrange(i+1, length):
-	    	for key in twoSum.keys():
-		    if i not in key and j not in key and nums[i] + nums[j] + twoSum[key] == target:	
-		        res.add(set([nums[i], nums[j], nums[key[0]], nums[key[1]]]))    
+		remain = target - nums[i] - nums[j]
+		if remain in twoSum:
+		    for keys in twoSum[remain]:
+			if keys[0] > j:
+			    res.add((nums[i], nums[j], nums[keys[0]], nums[keys[1]]))
+		           
 	return [list(i) for i in res] 
+
+    """
+    Given a linked list, remove the nth node from the end of list and return its head.
+    """
+    def removeNthFromEnd(self, head, n):
+	res = lnode(0)
+	first = head
+	second = head
+	count = 0
+	while first.nxt:
+	    if count >= n:
+		second = second.nxt
+	    first = first.nxt
+	second.nxt = second.nxt.nxt
+	return 	
+
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
