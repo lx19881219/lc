@@ -449,19 +449,78 @@ class solution:
     """
     def removeNthFromEnd(self, head, n):
 	res = lnode(0)
-	first = head
-	second = head
+	res.setNext(head)
+	first = res
+	second = res
 	count = 0
 	while first.nxt:
 	    if count >= n:
 		second = second.nxt
 	    first = first.nxt
+	    count += 1
 	second.nxt = second.nxt.nxt
-	return 	
+	return res.nxt
 
+    """
+    Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+    The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+    """
+    def validPareneses(self, s):
+	stack = []
+	for i in xrange(len(s)):
+	    if s[i] == '(' or s[i] == '[' or s[i] == '{':
+		stack.append(s[i])
+	    if s[i] == ')':
+		if len(stack) == 0 or stack.pop() != '(':
+		    return False
+	    if s[i] == ']':
+		if len(stack) == 0 or stack.pop() != '[':
+		    return False
+	    if s[i] == '}':
+		if len(stack) == 0 or stack.pop() != '{':
+		    return False
+	if len(stack) != 0:
+	    return False
+	return True
+
+    """
+    Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
+    """
+    def mergeTwoList(self, l1, l2):
+	res = temp = lnode(0)
+	while l1 and l2:
+	    if l1.val > l2.val:
+		temp.nxt = l2
+		temp = temp.nxt
+		l2 = l2.nxt
+	    else:
+		temp.nxt = l1
+		temp = temp.nxt
+		l1 = l1.nxt
+	while l1:
+	    temp.nxt = l1
+	    temp = temp.nxt
+	    l1 = l1.nxt
+	while l2:
+	    temp.nxt = l2
+	    temp = temp.nxt
+	    l2 = l2.nxt
+	return res.nxt
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
+
+    """
+     Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+    For example, given n = 3, a solution set is:
+
+    "((()))", "(()())", "(())()", "()(())", "()()()" 
+    """
+    def generateParentheses(self, n):
+	
+
 
 if __name__ == "__main__":
     s = solution()
@@ -551,3 +610,35 @@ if __name__ == "__main__":
     nums = [1, 0, -1, 0, -2, 2]
     result18 = s.fourSum(nums, 0)
     s.p('Four Sum', nums, result18)
+    
+    ln1 = lnode(1)
+    ln2 = lnode(2)
+    ln3 = lnode(3)
+    ln4 = lnode(4)
+    ln5 = lnode(5)
+    ln1.setNext(ln2)
+    ln2.setNext(ln3)
+    ln3.setNext(ln4)
+    ln4.setNext(ln5)
+    lnode().print_list(ln1)
+    result19 = s.removeNthFromEnd(ln1, 2)
+    lnode().print_list(result19)
+    
+    string = '()[]{}'
+    result20 = s.validPareneses(string)
+    s.p('valid Pareneses', string, 'Valid' if result20 else 'Invalid')
+
+    ln1 = lnode(2)
+    ln2 = lnode(4)
+    ln3 = lnode(9)
+    ln1.setNext(ln2)
+    ln2.setNext(ln3)
+    lnode().print_list(ln1)
+    ln4 = lnode(5)
+    ln5 = lnode(6)
+    ln6 = lnode(8)
+    ln4.setNext(ln5)
+    ln5.setNext(ln6)
+    lnode().print_list(ln4)
+    result21 = s.mergeTwoList(ln1, ln4)
+    lnode().print_list(result21)
