@@ -1,4 +1,5 @@
 import sys
+import heapq
  
 class lnode:
 
@@ -507,20 +508,49 @@ class solution:
 	    temp = temp.nxt
 	    l2 = l2.nxt
 	return res.nxt
-
-    def p(self, function, src, res):
-	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
-
     """
-     Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+    Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
 
     For example, given n = 3, a solution set is:
 
-    "((()))", "(()())", "(())()", "()(())", "()()()" 
+    "((()))", "(()())", "(())()", "()(())", "()()()"
     """
-    def generateParentheses(self, n):
-	
+    def dfsForParentheses(self, string, l, r, res):
+        if l > r:
+            return
+        if l == 0 and r == 0:
+            res.append(string)
+        if l > 0:
+            self.dfsForParentheses(string + '(', l-1, r, res)
+        if r > 0:
+            self.dfsForParentheses(string + ')', l, r-1, res)
 
+    def generateParentheses(self, n):
+        res = []
+        self.dfsForParentheses('', n, n, res)
+        return res
+    """
+    Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+    """
+    def mergeKLists(self, lists):
+        heap = []
+        head = lnode(0)
+        temp = head
+        for l in lists:
+            if l != None:
+                heap.append((l.val, l))
+        heapq.heapify(heap)
+        while heap:
+            pop = heapq.heappop(heap)
+            temp.nxt = lnode(pop[0])
+            temp = temp.nxt
+            if pop[1].nxt != None:
+                heapq.heappush(heap, (pop[1].nxt, pop[1].nxt.val))
+        return head.nxt
+
+    def p(self, function, src, res):
+	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
+	
 
 if __name__ == "__main__":
     s = solution()
@@ -642,3 +672,10 @@ if __name__ == "__main__":
     lnode().print_list(ln4)
     result21 = s.mergeTwoList(ln1, ln4)
     lnode().print_list(result21)
+
+    n = 3
+    result22 = s.generateParentheses(n)
+    s.p('Generate Parentheses', n, result22)
+
+    l = []
+    result23 = s.mergeKLists(l)
