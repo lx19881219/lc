@@ -548,6 +548,90 @@ class solution:
                 heapq.heappush(heap, (pop[1].nxt, pop[1].nxt.val))
         return head.nxt
 
+    """
+     Given a linked list, swap every two adjacent nodes and return its head.
+
+    For example,
+    Given 1->2->3->4, you should return the list as 2->1->4->3.
+
+    Your algorithm should use only constant space. You may not modify the values in the list, only nodes itself can be changed. 
+    """
+    def swapPairs(self, head):
+	if not head.nxt or not head.nxt.nxt:
+	    return head
+	nHead = lnode(0)
+	nHead.nxt = head
+	curr = nHead
+	
+	while curr.nxt and curr.nxt.nxt:
+	    tmp = curr.nxt.nxt
+	    curr.nxt.nxt = tmp.nxt
+	    tmp.nxt = curr.nxt
+	    curr.nxt = tmp
+	    curr = curr.nxt.nxt
+
+	return nHead.nxt
+	
+    """
+    Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
+
+    If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
+
+    You may not alter the values in the nodes, only nodes itself may be changed.
+
+    Only constant memory is allowed.
+    """
+    def reverseKGroup(self, head, k):
+	print 'hard 025'
+
+    """
+    Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.
+
+    Do not allocate extra space for another array, you must do this in place with constant memory.
+
+    For example,
+    Given input array nums = [1,1,2],
+
+    Your function should return length = 2, with the first two elements of nums being 1 and 2 respectively. It doesn't matter what you leave beyond the new length. 
+    """
+    def removeDuplicates(self, nums):
+	j = 0
+	for i in xrange(0, len(nums)):
+	    if nums[i] != nums[j]:
+		nums[i], nums[j+1] = nums[j+1], nums[i]
+		j += 1
+	return j+1
+	        
+    """
+    Given an array and a value, remove all instances of that value in place and return the new length.
+
+    The order of elements can be changed. It doesn't matter what you leave beyond the new length. 
+    """
+    def removeElement(self, nums, val): # from the begening
+	res = 0
+	l = 0
+	r = len(nums)-1
+	while l <= r:
+	    if nums[l] == val and nums[r] != val:
+		nums[l], nums[r] = nums[r], nums[l]
+		l += 1
+		r -= 1
+	    elif nums[r] == val:
+		r -= 1
+	    else:
+		l += 1
+	print nums
+	return l
+
+    def removeElementEnd(self, A, elem): # From the end
+        j = len(A)-1
+        for i in range(len(A) - 1, -1, -1):
+            if A[i] == elem:
+                A[i], A[j] = A[j], A[i]
+                j -= 1
+	    print A
+        return j+1
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -679,3 +763,24 @@ if __name__ == "__main__":
 
     l = []
     result23 = s.mergeKLists(l)
+
+    ln1 = lnode(1)
+    ln2 = lnode(2)
+    ln3 = lnode(3)
+    ln4 = lnode(4)
+    ln5 = lnode(5)
+    ln1.setNext(ln2)
+    ln2.setNext(ln3)
+    ln3.setNext(ln4)
+    ln4.setNext(ln5)
+    lnode().print_list(ln1)
+    result24 = s.swapPairs(ln1)
+    lnode().print_list(result24)
+
+    nums = [1,1,2,2,3,4,5,6,6,6,7,8]
+    result26 = s.removeDuplicates(nums)
+    s.p('Remove Duplicate', nums, result26)
+
+    nums = [1,2,3,1,4,5,1]
+    result27 = s.removeElement(nums, 1)
+    s.p('Remove Element', nums, result27)
