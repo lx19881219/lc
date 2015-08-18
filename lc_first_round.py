@@ -631,6 +631,63 @@ class solution:
                 j -= 1
 	    print A
         return j+1
+    """
+    Implement strStr().
+
+    Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack. 
+
+    Brutal match......
+    """
+    def strStr(self, haystack, needle):
+        if len(needle) > len(haystack):
+            return -1
+	i = 0
+        while i < len(haystack) - len(needle) + 1:
+            j = 0
+            k = i
+            while j < len(needle):
+                if  haystack[k] == needle[j]: 
+                    k += 1
+                    j += 1
+                else:
+                    break
+            if j == len(needle):
+                break
+            else:
+                i += 1
+        print i
+        if i == len(haystack) - len(needle) + 1:
+            return -1
+        else:
+            return i 
+    
+    """
+    Divide two integers without using multiplication, division and mod operator.
+
+    If it is overflow, return MAX_INT. 
+    """
+    def divide(self, divided, divisor):
+        if divisor == 0:
+            return 0
+        if (divided > 0 and divisor < 0) or (divided < 0 and divisor > 0):
+            sign = True
+        else:
+            sign = False
+        a = abs(divided)
+        b = abs(divisor)
+        res = 0
+        while b <= a:
+            sum = b
+            count = 1
+            while sum + sum <= a:
+                sum += sum
+                count += 1
+            a -= sum
+            res += count
+        if sign:
+            return 0-res
+        else:
+            return res
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -784,3 +841,12 @@ if __name__ == "__main__":
     nums = [1,2,3,1,4,5,1]
     result27 = s.removeElement(nums, 1)
     s.p('Remove Element', nums, result27)
+
+    string = 'mississippi'
+    result28 = s.strStr(string, 'issip')
+    s.p('StrStr', string, result28)
+
+    divided = 1
+    divisor = -1
+    result29 = s.divide(divided, divisor)
+    s.p('Divide', '1 / -1', result29)
