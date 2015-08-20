@@ -688,7 +688,198 @@ class solution:
             return 0-res
         else:
             return res
+    """
+    You are given a string, s, and a list of words, words, that are all of the same length. Find all starting indices of substring(s) in s that is a concatenation of each word in words exactly once and without any intervening characters.
 
+    For example, given:
+    s: "barfoothefoobarman"
+    words: ["foo", "bar"]
+
+    You should return the indices: [0,9].
+    Scan every m*n long string start from each position in S, see if all the strings in L have been appeared only once using Map data structure. If so, store the starting position.
+    """
+    def findSubstring(self, s, words):
+        if not words:
+            return None
+        word_len = len(words[0])
+        string_len = len(words) * len(words[0])
+        word_dict = {}
+        for word in words:
+            if word in word_dict:
+                word_dict[word] += 1
+            else:
+                word_dict[word] = 1
+        res = []
+        for i in xrange(len(s)):
+            k = i
+            curr = {}
+            print s[k]
+            while k+word_len - i <= string_len and s[k:k+word_len] in word_dict:
+                print s[k:k+word_len]
+                if s[k:k+word_len] not in curr:
+                    curr[s[k:k+word_len]] = 1
+                else:
+                    curr[s[k:k+word_len]] += 1
+                if curr[s[k:k+word_len]] > word_dict[s[k:k+word_len]]:
+                    break
+                if k+word_len - i == string_len:
+                    res.append(i)
+                    break
+                k += word_len
+
+        return res
+                
+    def findSubstring_list(self, s, words):
+        """
+        Do not use sth in list, it's O(n), but for sth in dict, it's O(1) on average
+        """
+        if not words:
+            return None
+        word_len = len(words[0])
+        string_len = len(words) * len(words[0])
+        res = []
+        for i in xrange(len(s)):
+            print s[i]
+            k = i
+            temp = words[:]
+            print k, s[k:k+word_len], temp
+            while k+word_len - i <= string_len and s[k:k+word_len] in temp:
+                print s[k:k+word_len]
+                temp.pop(temp.index(s[k:k+word_len]))
+                if len(temp) == 0:
+                    res.append(i)
+                    break
+                k += word_len
+
+        return res
+
+    """
+     Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+     If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+
+     The replacement must be in-place, do not allocate extra memory.
+
+     Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+     1,2,3 - 1,3,2
+     3,2,1 - 1,2,3
+     1,1,5 - 1,5,1
+    """
+    def nextPermutation(self, nums):
+        if len(nums) <= 1:
+            return nums
+        temp = -1
+        for i in range(len(nums)-2, -1, -1):
+            if nums[i] < nums[i+1]:
+                temp = i
+                break
+        if temp == -1:
+            nums.reverse()
+            return nums
+        else:
+            for j in range(len(nums)-1, temp, -1):
+                if nums[j] > nums[temp]:
+                    nums[j],nums[temp] = nums[temp],nums[j]
+                    break
+        nums[temp+1:len(nums)] = nums[temp+1:len(nums)][::-1]
+        return nums
+    
+    """
+    Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
+
+    For "(()", the longest valid parentheses substring is "()", which has length = 2.
+
+    Another example is ")()())", where the longest valid parentheses substring is "()()", which has length = 4. 
+    """
+    def longestValidParatheses(self, string):
+        """Using Stack"""
+        res = 0
+        stack = []
+        last = -1
+        for i in xrange(len(string)):
+            if string[i] == '(':
+                stack.append(i)
+            elif not stack:
+                last = i
+            else:
+                index = stack.pop()
+                if not stack:
+                    length = i - last
+                else:
+                    length = i - stack[-1]
+                if length > res:
+                    res = length
+        return res
+    """
+    Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+
+    (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+    You are given a target value to search. If found in the array return its index, otherwise return -1.
+
+    You may assume no duplicate exists in the array.
+    """
+
+    def search(self, nums, target):
+        if not nums:
+            return -1
+        left = 0
+        right = len(nums)-1
+        while left <= right:
+            mid = (left + right)/2
+            if target == nums[mid]:
+                return mid
+            elif nums[left] <= nums[mid]:
+                if target >= nums[left] and target < nums[mid]:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            elif nums[right] > nums[mid]:
+                if target > nums[mid] and target <= nums[right]:
+                    left = mid + 1
+                else:
+                    right = mid -1
+        return -1
+
+    """
+    Given a sorted array of integers, find the starting and ending position of a given target value.
+
+    Your algorithm's runtime complexity must be in the order of O(log n).
+
+    If the target is not found in the array, return [-1, -1].
+
+    For example,
+    Given [5, 7, 7, 8, 8, 10] and target value 8,
+    return [3, 4]. 
+    """
+
+    def searchRange(self, nums, target):
+        """Binary search"""
+        if not nums:
+            return [-1, -1]
+        left = 0
+        right = len(nums) - 1
+        l = -1
+        r = -1
+        while left <= right:
+            mid = (left + right)/2
+            if target == nums[mid]:
+                l = mid
+                r = mid
+                while r < right and nums[mid] == nums[r+1]:
+                    r += 1
+                while l > left and nums[mid] == nums[l-1]:
+                    l -= 1
+                return [l, r]
+            elif target > nums[mid]:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return [-1, -1]
+
+    """
+    
+    """
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -850,3 +1041,25 @@ if __name__ == "__main__":
     divisor = -1
     result29 = s.divide(divided, divisor)
     s.p('Divide', '1 / -1', result29)
+
+    string = 'barfoothefoobarman'
+    words = ['foo', 'bar']
+    result30 = s.findSubstring(string, words)
+    s.p('findSubstring', string, result30)
+
+    nums = [6,8,7,4,3,2]
+    result31 = s.nextPermutation(nums)
+    s.p('nextPermutation', nums, result31)
+    nums = []
+
+    string = '(()()'
+    result32 = s.longestValidParatheses(string)
+    s.p('longestValidParatheses', string, result32)
+    
+    nums = [4,5,6,7,8,0,1,2,3]
+    result33 = s.search(nums, 2)
+    s.p('search', nums, result33)
+
+    nums = [1,2,3,4,5,5,6,6]
+    result34 = s.searchRange(nums, 5)
+    s.p('searchRange', nums, result34)
