@@ -878,8 +878,67 @@ class solution:
         return [-1, -1]
 
     """
-    
+    Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+
+    You may assume no duplicates in the array.
+
+    Here are few examples.
+    [1,3,5,6], 5 - 2
+    [1,3,5,6], 2 - 1
+    [1,3,5,6], 7 - 4
+    [1,3,5,6], 0 - 0 
     """
+
+    def searchInsert(self, nums, target):
+        if not nums:
+            return 0
+        left = 0
+        right = len(nums) - 1
+        while left <= right:
+            mid = (left+right)/2
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] > target:
+                right = mid-1
+            else:
+                left = mid+1
+        return left
+    """
+    Valid Sudoku
+    """
+    def isValidSudoku(self, board):
+        # validate rows
+        for i in xrange(9):
+            if board[i].count('.') + len(set(board[i])) - 1 != 9: return False
+        # validate columns
+        for i in xrange(9):
+            col = [board[j][i] for j in xrange(9)]
+            if col.count('.') + len(set(col)) - 1 != 9: return False
+        # validate 3x3 squares
+        for i in (0, 3, 6):
+            for j in (0, 3, 6):
+                square = [board[i + m][j + n] for m in (0, 1, 2) for n in (0, 1, 2)]
+                if square.count('.') + len(set(square)) - 1 != 9: return False
+        return True
+
+    """
+    Sudoku Solver
+    """
+
+    def sudokuSolver(self, board):
+        def isValid(x, y):
+            tmp = board[x][y]
+            board[x][y] = 'E'
+            for i in xrange(9):
+                if board[x][i] == tmp:
+                    return False
+            for i in xrange(9):
+                if board[i][y] == tmp:
+                    return False
+            for i in [0,3,6]:
+                for j in [0,1,2]:
+                    if board
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -1063,3 +1122,7 @@ if __name__ == "__main__":
     nums = [1,2,3,4,5,5,6,6]
     result34 = s.searchRange(nums, 5)
     s.p('searchRange', nums, result34)
+
+    nums = [1,3,5,6]
+    result35 = s.searchInsert(nums, 2)
+    s.p('searchInsert', nums, result35)
