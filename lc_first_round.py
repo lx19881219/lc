@@ -935,9 +935,97 @@ class solution:
             for i in xrange(9):
                 if board[i][y] == tmp:
                     return False
-            for i in [0,3,6]:
-                for j in [0,1,2]:
-                    if board
+            for i in range(3):
+                for j in range(3):
+                    # SMART!!!!
+                    if board[(x/3)*3+i][(y/3)*3+j]==tmp: return False
+            board[x][y] = tmp
+            return True
+        def dfs(board):
+            for i in xrange(9):
+                for j in xrange(9):
+                    if board[i][j] == '.':
+                        for k in '123456789':
+                            board[i][j] = k
+                            if isValid(i, j) and dfs(board):
+                                return True
+                            board[i][j] = '.'
+                        return False
+            return True
+        dfs(board)
+    """
+    The count-and-say sequence is the sequence of integers beginning as follows:
+    1, 11, 21, 1211, 111221, ...
+
+    1 is read off as "one 1" or 11.
+    11 is read off as "two 1s" or 21.
+    21 is read off as "one 2, then one 1" or 1211.
+
+    Given an integer n, generate the nth sequence.
+
+    Note: The sequence of integers will be represented as a string. 
+    """
+
+    def CountAndSay(self, n):
+        if n < 1:
+            return ''
+        string = '1'
+        for c in xrange(n-1):
+            tmp = ''
+            count = 1
+            for i in xrange(len(string)-1):
+                if string[i] == string[i+1]:
+                    count += 1
+                else:
+                    tmp += str(count)+string[i]
+                    count = 1
+            tmp += str(count) + string[-1]
+            string = tmp
+        return string
+
+    """
+     Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+     The same repeated number may be chosen from C unlimited number of times.
+    """
+    def CombinationSum(self, candidates, target):
+        def dfs(candidates, target, nums):
+            if target == 0:
+                res.append([i for i in nums])
+                return
+            for i in xrange(len(candidates)):
+                if candidates[i] <= target:
+                    nums.append(candidates[i])
+                    dfs(candidates[i::], target-candidates[i], nums)
+                    #clean the num list when find an answer
+                    nums.pop()
+        candidates.sort()
+        res = []
+        dfs(candidates, target, [])
+        return res 
+
+    """
+     Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+     Each number in C may only be used once in the combination. 
+    """
+
+    def CombinationSum2(self, candidates, target):
+        def dfs(candidates, target, nums):
+            if target == 0 and nums not in res:
+                res.append([i for i in nums])
+                return
+            for i in xrange(len(candidates)):
+                if candidates[i] <= target:
+                    nums.append(candidates[i])
+                    dfs(candidates[i+1::], target-candidates[i], nums)
+                    #clean the num list when find an answer
+                    nums.pop()
+        candidates.sort()
+        res = []
+        dfs(candidates, target, [])
+        return res 
+
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -1126,3 +1214,15 @@ if __name__ == "__main__":
     nums = [1,3,5,6]
     result35 = s.searchInsert(nums, 2)
     s.p('searchInsert', nums, result35)
+
+    n = 2
+    result38 = s.CountAndSay(n)
+    s.p('CountAndSay', n, result38)
+    
+    candidates = [2,3,6,7]
+    result39 = s.CombinationSum(candidates, 7)
+    s.p('CombinationSum', candidates, result39)
+
+    candidates = [10,1,2,7,6,1,5]
+    result40 = s.CombinationSum2(candidates, 8)
+    s.p('CombinationSum2', candidates, result40)
