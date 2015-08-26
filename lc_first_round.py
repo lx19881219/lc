@@ -1,4 +1,5 @@
 import sys
+import pdb
 import heapq
  
 class lnode:
@@ -1026,6 +1027,77 @@ class solution:
         dfs(candidates, target, [])
         return res 
 
+    """
+     Given an unsorted integer array, find the first missing positive integer.
+
+     For example,
+     Given [1,2,0] return 3,
+     and [3,4,-1,1] return 2.
+
+     Your algorithm should run in O(n) time and uses constant space. 
+    """
+
+    def firstMissingPositive(self, nums):
+        """swap element make nums[i] = i+1, loop again find the wrong one"""
+        length = len(nums)
+        for i in xrange(length):
+            while nums[i] != i+1:
+                if nums[i] > length or nums[i]<=0 or nums[i] == nums[nums[i]-1]:
+                    break
+                
+                #nums[i], nums[nums[i]-1] = nums[nums[i]-1], nums[i] this does not work, list out of range????????
+                t = nums[nums[i]-1]; nums[nums[i]-1] = nums[i]; nums[i] = t
+        for i in xrange(length):
+            if nums[i] != i+1:
+                return i+1
+        return length+1
+
+    """
+     Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.
+
+     For example,
+     Given [0,1,0,2,1,0,1,3,2,1,2,1], return 6. 
+    """
+    def trap(self, height):
+        if not height:
+            return 0
+        max_height = []
+        # loop from left find the max from left
+        left_max = 0
+        for i in xrange(0,len(height)):
+            if height[i] > left_max:
+                left_max = height[i]
+            max_height.append(left_max)
+        # loop from right find the max from right, if < left_max, replace it
+        right_max = 0
+        for i in xrange(len(height)-1, -1, -1):
+            if height[i] > right_max:
+                right_max = height[i]
+            if right_max < max_height[i]:
+                max_height[i] = right_max
+        res = 0
+        # loop again, calculate the difference between max an current
+        for i in xrange(len(height)):
+            if max_height[i] > height[i]:
+                res += (max_height[i] - height[i])
+        return res
+
+    """
+    Given two numbers represented as strings, return multiplication of the numbers as a string.
+
+    Note: The numbers can be arbitrarily large and are non-negative.
+    """
+
+    def multiply(self, num1, num2):
+        num1 = num1[::-1]
+        num2 = num2[::-1]
+        res = 0
+        for i in xrange(len(num1)):
+            for j in xrange(len(num2)):
+                #print int(num1[i])*int(num2[j])*(10**(i+j))
+                res += int(num1[i]) * int(num2[j]) * (10**(i+j))
+        return str(res)
+
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -1226,3 +1298,17 @@ if __name__ == "__main__":
     candidates = [10,1,2,7,6,1,5]
     result40 = s.CombinationSum2(candidates, 8)
     s.p('CombinationSum2', candidates, result40)
+
+
+    nums = [9,4,1,-1,2]
+    result41 = s.firstMissingPositive(nums)
+    s.p('firstMissingPositive', nums, result41)
+
+    height = [0,1,0,2,1,0,1,3,2,1,2,1]
+    result42 = s.trap(height)
+    s.p('trap', height, result42)
+
+    num1 = '45'
+    num2 = '45'
+    result43 = s.multiply(num1,num2)
+    s.p('multiply', num1+num2, result43)
