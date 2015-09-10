@@ -1136,12 +1136,65 @@ class solution:
      The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the last index.) 
     """
     def jump(self, nums):
-        res = [i for i in xrange(1<<31-1)]
+        '''res = [i for i in xrange(1<<31-1)]
         for i in xrange(1, len(nums)):
             for j in xrange(i):
                 if nums[j] >= i-j:
                     res[i] = min(res[i], res[j]+1)
-        return res[-1]
+        return res[-1]'''
+        #dp cause TLE
+
+        # We use "last" to keep track of the maximum distance that has been reached
+        # by using the minimum steps "ret", whereas "curr" is the maximum distance
+        # that can be reached by using "ret+1" steps. Thus,curr = max(i+A[i]) where 0 <= i <= last.
+        res = 0
+        last = 0
+        curr = 0
+        for i in xrange(len(nums)):
+            if i > last:
+                last = curr
+                res += 1
+                curr = max(curr, i + nums[i])
+        return res
+    
+    """
+    Given a collection of numbers, return all possible permutations.
+
+    For example,
+    [1,2,3] have the following permutations:
+    [1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1]. 
+    """
+    def permute(self, nums):
+        if len(nums) == 0:
+            return []
+        if len(nums) == 1:
+            return [nums]
+        res = []
+        for i in xrange(len(nums)):
+            for j in self.permute(nums[:i]+nums[i+1:]):
+                res.append([nums[i]] + j)
+        return res
+
+    """
+    Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+    For example,
+    [1,1,2] have the following unique permutations:
+    [1,1,2], [1,2,1], and [2,1,1]. 
+    """
+    def permuteUnique(self, nums):
+        # This approach will cause TLE, the solution is to sort before enter
+        # the loop, just compare the previous one.
+        if len(nums) == 0: return [];
+        if len(nums) == 1: return [nums];
+        res = []
+        for i in xrange(len(nums)):
+            for j in self.permuteUnique(nums[:i]+nums[i+1:]):
+                # 'in' is O(log(n))
+                if [nums[i]] + j in res:
+                    continue
+                res.append([nums[i]] + j)
+        return res
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -1365,3 +1418,11 @@ if __name__ == "__main__":
     nums = [2,3,1,1,4]
     result45 = s.jump(nums)
     s.p('JumpGameII', nums, result45)
+
+    nums = [1,2,3]
+    result46 = s.permute(nums)
+    s.p('Permutation', nums, result46)
+
+    nums = [1,1,2]
+    result47 = s.permuteUnique(nums)
+    s.p('PermuteUnique', nums, result47)
