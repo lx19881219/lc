@@ -1099,6 +1099,50 @@ class solution:
         return str(res)
 
 
+    """
+    Implement wildcard pattern matching with support for '?' and '*'.
+    '?' Matches any single character.
+    '*' Matches any sequence of characters (including the empty sequence).
+
+    The matching should cover the entire input string (not partial).
+
+    The function prototype should be:
+        bool isMatch(const char *s, const char *p)
+    """
+    '''def isMatch(self, string, p):
+        """confuse........."""
+        sp = pp = 0
+        star_p = -1
+        while sp < len(string):
+            if pp < len(p) and (string[sp] == p[pp] or p[pp] == '?'):
+                sp += 1
+                pp += 1
+            elif pp < len(string) and p[pp] == '*':
+                sp += 1
+                pp += 1
+                star_p = pp
+            elif star_p != -1:
+                sp += 1'''
+    """
+     Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+     Each element in the array represents your maximum jump length at that position.
+
+     Your goal is to reach the last index in the minimum number of jumps.
+
+     For example:
+     Given array A = [2,3,1,1,4]
+
+     The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the last index.) 
+    """
+    def jump(self, nums):
+        res = [i for i in xrange(1<<31-1)]
+        for i in xrange(1, len(nums)):
+            for j in xrange(i):
+                if nums[j] >= i-j:
+                    res[i] = min(res[i], res[j]+1)
+        return res[-1]
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -1312,3 +1356,12 @@ if __name__ == "__main__":
     num2 = '45'
     result43 = s.multiply(num1,num2)
     s.p('multiply', num1+num2, result43)
+
+    string = 'ababe'
+    p = '?b*e'
+    #result44 = s.isMatch(string, p)
+    s.p('isMatch', string, 'Confusing....')
+
+    nums = [2,3,1,1,4]
+    result45 = s.jump(nums)
+    s.p('JumpGameII', nums, result45)
