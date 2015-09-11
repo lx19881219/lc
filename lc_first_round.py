@@ -1195,6 +1195,55 @@ class solution:
                     continue
                 res.append([nums[i]] + j)
         return res
+    """
+    You are given an n x n 2D matrix representing an image.
+
+    Rotate the image by 90 degrees (clockwise).
+
+    Follow up:
+    Could you do this in-place?
+    """
+    def rotate(self, matrix):
+     
+        for i in xrange(len(matrix)):
+            for j in xrange(i+1, len(matrix)):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+      
+        for i in xrange(len(matrix)):
+            matrix[i].reverse()
+       
+        return matrix
+
+    """
+    Given an array of strings, group anagrams together.
+
+    For example, given: ["eat", "tea", "tan", "ate", "nat", "bat"],
+    Return:
+
+    [
+      ["ate", "eat","tea"],
+      ["nat","tan"],
+      ["bat"]
+    ]
+
+    Note:
+
+    For the return value, each inner list's elements must follow the lexicographic order.
+    All inputs will be in lower-case.
+    """
+    def groupAnagrams(self, strs):
+        res = []
+        d = {}
+        strs.sort()
+        for s in strs:
+            char_tuple = tuple(sorted(s))
+            if char_tuple not in d:
+                d[char_tuple] = [s]
+            else:
+                d[char_tuple].append(s)
+        for word in d:
+            res.append(d[word])
+        return res
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -1426,3 +1475,17 @@ if __name__ == "__main__":
     nums = [1,1,2]
     result47 = s.permuteUnique(nums)
     s.p('PermuteUnique', nums, result47)
+
+    value = 1
+    matrix = [[0 for x in xrange(5)] for x in xrange(2)]
+    source = matrix
+    for i in xrange(2):
+        for j in xrange(5):
+            matrix[i][j] = value
+            value += 1
+    s.rotate(matrix)
+    s.p('RotateImage', source, matrix)
+
+    strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+    result49 = s.groupAnagrams(strs)
+    s.p('groupAnagrams', strs, result49)
