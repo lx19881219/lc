@@ -1245,6 +1245,76 @@ class solution:
             res.append(d[word])
         return res
 
+    """
+    Implement pow(x, n).
+    """
+    def myPow(self, x, n):
+        # x^n = x^(n/2)*x^(n/2)*x^(n%2)
+        if n == 0:
+            return 1.0
+        elif n < 0:
+            return 1/myPow(self, x, -n)
+        elif n%2:
+            return self.myPow(x*x, n/2)*x
+        else:
+            return self.myPow(x*x, n/2)
+
+    """
+    N Queens
+    """
+    def solveNQueens(self, n):
+        def check(m, k):
+            # check if it is valid to put queen in row m, column n
+            for i in xrange(m):
+                if board[i] == k or abs(m-i) == abs(board[i]-k):
+                    return False
+            return True
+        def dfs(m, solution):
+            if m == n:
+                res.append(solution)
+                return
+            for i in xrange(n):
+                if check(m, i):
+                    board[m] = i
+                    dfs(m+1, solution+['.'*(i) +'Q' + '.'*(n-i-1)])
+
+        board = [-1 for i in xrange(n)]
+        res = []
+        dfs(0, [])
+        return res
+
+    """
+    Follow up for N-Queens problem.
+
+    Now, instead outputting board configurations, return the total number of distinct solutions.
+    """
+    def totalNQueens(self, n):
+        # not done
+        def check(m, k):
+            for i in range(m):
+                if board[i] == k or abs(m-i) == abs(board[i]-k):
+                    return False
+            return True
+        def dfs(m):
+            if m == n:
+                res.append(1)
+                return
+            for i in range(n):
+                if check(m, i):
+                    board[m] = i
+                    dfs(m+1)
+        board = [-1 for i in range(n)]
+        # for res, if define res as res = 0, it will cause referenced before assignment.
+        # res is globle and immutable, but list is mutable
+        res = []
+        dfs(0)
+        return len(res)
+
+    """
+    Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
+    """
+    
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -1489,3 +1559,12 @@ if __name__ == "__main__":
     strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
     result49 = s.groupAnagrams(strs)
     s.p('groupAnagrams', strs, result49)
+
+    x = 2
+    n = 5
+    result50 = s.myPow(x, n)
+    s.p('myPow', '%f^%f' % (x, n), result50)
+
+    n = 4
+    result52 = s.totalNQueens(n)
+    s.p('totalNQueens', n, result52)
