@@ -87,30 +87,34 @@ class solution:
     """
     There are two sorted arrays nums1 and nums2 of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
     """
-    def getMedian(self, nums1, nums2, k):
+    def getkth(self, nums1, nums2, k):
 	l1 = len(nums1)
 	l2 = len(nums2)
 	if l1 > l2:
-	    return self.getMedian(nums2, nums1, k)
+	    return self.getkth(nums2, nums1, k)
+        # if nums2 is empty, get kth directly
 	if l1 == 0:
 	    return nums2[k-1]
 	if k == 1:
-	    return min(nums1[0], nums2[1])
+	    return min(nums1[0], nums2[0])
+        # compare num1[k/2] and nums[k/2], remove the smaller one
+        # nums1 = {1，3，5，7}；nums2 = {2，4，6，8，9，10} k = 7; k/2 = 3
+        # 5 < 6 so remove 1, 3, 5, because it is impossible that the kth in here
 	p1 = min(k/2, l1)
 	p2 = k - p1
 	if nums1[p1-1] <= nums2[p2-1]:
-	    return self.getMedian(nums1[p1:], nums2, k-p1)
+	    return self.getkth(nums1[p1:], nums2, k-p1)
 	else:
-	    return self.getMedian(nums1, nums2[p2:], k-p2)
+	    return self.getkth(nums1, nums2[p2:], k-p2)
 	    	
 
     def medianOfSorted(self, nums1, nums2):
 	m = len(nums1)
 	n = len(nums2)
 	if (m+n) % 2 == 1:
-	    return (self.getMedian(nums1, nums2, (m+n)/2) + self.getMedian(nums1, nums2, (m+n)/2+1))/2
+	    return (self.getkth(nums1, nums2, (m+n)/2) + self.getkth(nums1, nums2, (m+n)/2+1))/2
 	else:
-	    return self.getMedian(nums1, nums2, (m+n)/2)
+	    return self.getkth(nums1, nums2, (m+n)/2)
 
     """
     Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
@@ -122,8 +126,6 @@ class solution:
 	return string[l+1:r]
 
     def longestPalindromic(self, string):
-	start = 0
-	end = 0
 	res = ''
 	for i in xrange(len(string)):
 	    if i<len(string)-1 and string[i] == string[i+1]:
