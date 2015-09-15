@@ -1313,7 +1313,74 @@ class solution:
     """
     Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
     """
-    
+    def maxSubarray(self, nums):
+        if not nums: return 0;
+        temp = 0 
+        max_sum = nums[0]
+        for i in range(len(nums)):
+            if temp < 0:
+                temp = 0
+            temp += nums[i]
+            max_sum = max(temp, max_sum)
+        return max_sum
+    """
+    Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+    """
+    def spiralOrder(self, matrix):
+        if not matrix: return [];
+        l = 0
+        u = 0
+        d = len(matrix)-1
+        r = len(matrix[0])-1
+        i = 0
+        state = 0 #0:left->right, 1:up->down, 2:right->left, 3:down->up
+        res = []
+        while True:
+            if state == 0:
+                for x in range(l, r+1):
+                    res.append(matrix[u][x])
+                u+=1
+            if state == 1:
+                for x in range(u, d+1):
+                    res.append(matrix[x][r])
+                r -=1
+            if state == 2:
+                for x in range(r, l-1, -1):
+                    res.append(matrix[d][x])
+                d -= 1
+            if state == 3:
+                for x in range(d, u-1, -1):
+                    res.append(matrix[x][l])
+                l += 1
+            if l>r or u>d:
+                return res
+            state += 1
+            state %= 4
+            i += 1
+
+    """
+    Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+    Each element in the array represents your maximum jump length at that position.
+
+    Determine if you are able to reach the last index.
+
+    For example:
+        A = [2,3,1,1,4], return true.
+
+        A = [3,2,1,0,4], return false.
+    """
+    def canJump(self, nums): 
+        if not nums: return False;
+        max_len = 0
+        for i in range(len(nums)):
+            if max_len >= len(nums)-1:
+                return True
+            if max_len < i:
+                return False
+            curr_longest = i + nums[i]
+            max_len = max(max_len, curr_longest)
+        return False
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -1568,3 +1635,20 @@ if __name__ == "__main__":
     n = 4
     result52 = s.totalNQueens(n)
     s.p('totalNQueens', n, result52)
+
+    nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+    result53 = s.maxSubarray(nums)
+    s.p('maxsubarray', nums, result53)
+
+    matrix = [
+            [1,2,3],
+            [4,5,6],
+            [7,8,9]
+            ]
+    result54 = s.spiralOrder(matrix)
+    s.p('spiralOrder', matrix, result54)
+
+
+    nums = [3,2,1,0,4]
+    result55 = s.canJump(nums)
+    s.p('canJump', nums, result55)
