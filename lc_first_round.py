@@ -17,6 +17,11 @@ class lnode:
 	    return self.print_list(head.nxt)
 	print ''
 
+class interval:
+    def __init__(self, s, e):
+        self.start = s
+        self.end = e
+
 class solution:
     """
     Given an array of integers, find two numbers such that they add up to a specific target number.
@@ -98,7 +103,7 @@ class solution:
 	if k == 1:
 	    return min(nums1[0], nums2[0])
         # compare num1[k/2] and nums[k/2], remove the smaller one
-        # nums1 = {1，3，5，7}；nums2 = {2，4，6，8，9，10} k = 7; k/2 = 3
+        # nums1={1,3,5,7};nums2 = {2,4,6,8,9,10} k=7 k/2=3
         # 5 < 6 so remove 1, 3, 5, because it is impossible that the kth in here
 	p1 = min(k/2, l1)
 	p2 = k - p1
@@ -127,14 +132,14 @@ class solution:
 
     def longestPalindromic(self, string):
 	res = ''
-	for i in xrange(len(string)):
-	    if i<len(string)-1 and string[i] == string[i+1]:
-		sub = self.getPalindromic(string, i, i+1)
-	    else:
-		sub = self.getPalindromic(string, i, i)
-	    if len(sub) > len(res):
-		res = sub
-	return res
+        for i in range(len(string)):
+            sub1 = self.getPalindromic(string, i, i)
+            if len(sub1) > len(res):
+                res = sub1
+            sub2 = self.getPalindromic(string, i, i+1)
+            if len(sub2) > len(res):
+                res = sub2
+        return res
 
     """
      The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
@@ -1384,6 +1389,56 @@ class solution:
             max_len = max(max_len, curr_longest)
         return False
 
+    """
+    Given a collection of intervals, merge all overlapping intervals.
+
+    For example,
+    Given [1,3],[2,6],[8,10],[15,18],
+    return [1,6],[8,10],[15,18]. 
+    """
+    def merge(self, intervals):
+        if not intervals:
+            return []
+        intervals.sort(key = lambda x: x.start)
+        res = []
+        res.append(intervals[0])
+        for i in xrange(1, len(intervals)):
+            # if current in the range of res[-1]
+            if intervals[i].end <= res[-1].end:
+                continue
+            # if current.start between res[-1]
+            elif intervals[i].start <= res[-1].end:
+                res[-1].end = intervals[i].end
+            else:
+                res.append(intervals[i])
+        return res
+
+    """
+    Given a string s consists of upper/lower-case alphabets and empty space characters ' ', return the length of last word in the string.
+
+    If the last word does not exist, return 0.
+
+    Note: A word is defined as a character sequence consists of non-space characters only.
+
+    For example,
+    Given s = "Hello World",
+    return 5. 
+    """
+    def lengthOfLastWord(self, s):
+        count = 0
+        found_word = False
+        for i in xrange(len(s)-1, -1, -1):
+            if s[i] != ' ':
+                count += 1
+                found_word = True
+            if s[i] == ' ' and found_word:
+                break
+        return count
+
+    """
+    
+    """
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -1654,3 +1709,7 @@ if __name__ == "__main__":
     nums = [3,2,1,0,4]
     result55 = s.canJump(nums)
     s.p('canJump', nums, result55)
+
+    string = 'hello world'
+    result57 = s.lengthOfLastWord(string)
+    s.p('length of last word', string, result57)
