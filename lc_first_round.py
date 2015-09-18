@@ -1436,8 +1436,64 @@ class solution:
         return count
 
     """
-    
+    Given an integer n, generate a square matrix filled with elements from 1 to n2 in spiral order. 
     """
+    def generateMatrix(self, n):
+        matrix = [[0 for i in xrange(n)] for i in xrange(n)]
+        state = 0
+        up = left = 0
+        right = down = n - 1
+        i = 1
+        while True:
+            if state == 0:
+                for j in xrange(left, right + 1):
+                    matrix[up][j] = i
+                    i += 1
+                up += 1
+                #state = 1
+            elif state == 1:
+                for j in xrange(up, down + 1):
+                    matrix[j][right] = i
+                    i += 1
+                right -= 1
+                #state = 2
+            elif state == 2:
+                for j in xrange(right, left-1, -1):
+                    matrix[down][j] = i
+                    i += 1
+                down -= 1
+                #state = 3
+            elif state == 3:
+                for j in xrange(down, up-1, -1):
+                    matrix[j][left] = i
+                    i += 1
+                left += 1
+                #state = 0
+            if left > right or up > down:
+                break
+            state += 1
+            state %= 4
+            for k in matrix:
+                print k
+        return matrix
+
+    """
+    The set [1,2,3,…,n] contains a total of n! unique permutations.
+
+    By listing and labeling all of the permutations in order,
+    We get the following sequence (ie, for n = 3):
+
+        "123"
+        "132"
+        "213"
+        "231"
+        "312"
+        "321"
+
+    Given n and k, return the kth permutation sequence.
+    """
+    def getPermutation(self, n, k):
+        solution_nums = 
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -1713,3 +1769,8 @@ if __name__ == "__main__":
     string = 'hello world'
     result57 = s.lengthOfLastWord(string)
     s.p('length of last word', string, result57)
+
+    n = 4
+    result58 = s.generateMatrix(n)
+    for i in result58:
+        print i
