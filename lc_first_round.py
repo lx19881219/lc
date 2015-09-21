@@ -1478,8 +1478,7 @@ class solution:
         return matrix
 
     """
-    The set [1,2,3,…,n] contains a total of n! unique permutations.
-
+    The set [1,2,3,...,n] contains a total of n! unique permutations
     By listing and labeling all of the permutations in order,
     We get the following sequence (ie, for n = 3):
 
@@ -1493,8 +1492,116 @@ class solution:
     Given n and k, return the kth permutation sequence.
     """
     def getPermutation(self, n, k):
-        solution_nums = 
+        # decide sequence char by char
+        # for nth num from right, there are (n-1)!+1 selections,
+        # k/(n-1)! to decide which number range
+        res = ''
+        k -= 1
+        nums = 1
+        for i in xrange(1, n): nums *= i
+        num = [1,2,3,4,5,6,7,8,9]
+        for i in reversed(range(n)):
+            curr = num[k/nums]
+            res += str(curr)
+            num.remove(curr)
+            if i != 0:
+                k %= nums
+                nums /= i
+        return res
+    """
+    Given a list, rotate the list to the right by k places, where k is non-negative.
 
+    For example:
+    Given 1->2->3->4->5->NULL and k = 2,
+    return 4->5->1->2->3->NULL.
+    """
+    def rotateRight(self, head, k):
+        # Not Done.....................
+        if k == 0 or not head:
+            return head
+        new_head = lnode(0)
+        p = last = head
+        count = 0
+        while last.nxt:
+            last = last.nxt
+            count += 1
+        step = count - (k % count)
+        for i in xrange(step):
+            p = p.nxt
+        last.nxt = head
+        new_head = p.nxt
+        p.nxt = None
+        return new_head
+
+    """
+    A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+
+    The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).
+
+    How many possible unique paths are there?
+    """
+    def uniquePaths(self, m, n):
+        # dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        # consider special case first
+        if m == 1 or n == 1:
+            return 1
+        grid = [[0 for i in xrange(n)] for j in xrange(m)]
+        for i in xrange(n):
+            grid[0][i] = 1
+        for j in xrange(m):
+            grid[j][0] = 1
+        for i in xrange(1, m):
+            for j in xrange(1, n):
+                grid[i][j] = grid[i-1][j] + grid[i][j-1]
+        return grid[m-1][n-1]
+    
+    """
+    Follow up for "Unique Paths":
+
+    Now consider if some obstacles are added to the grids. How many unique paths would there be?
+
+    An obstacle and empty space is marked as 1 and 0 respectively in the grid.
+    """
+    def uniquePathsWithObstacles(self, obstacleGrid):
+        if not obstacleGrid:
+            return 0
+        m = len(obstacleGrid)
+        n = len(obstacleGrid[0])
+        dp = [[0 for i in xrange(n)] for j in xrange(m)]
+        for i in xrange(n):
+            if obstacleGrid[0][i] == 1:
+                dp[0][i] = 0
+                break
+            else:
+                dp[0][i] = 1
+        for i in xrange(m):
+            if obstacleGrid[i][0] == 1:
+                dp[i][0] = 0
+                break
+            else:
+                dp[i][0] = 1
+        for i in xrange(1, m):
+            for j in xrange(1, n):
+                if obstacleGrid[i][j] == 1:
+                    dp[i][j] = 0
+                else:
+                    dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        return dp[m-1][n-1]
+    """
+    Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
+
+    Note: You can only move either down or right at any point in time.
+    """
+    def minPathSum(self, grid):
+        if not grid:
+            return 0
+        m = len(grid)
+        n = len(grid[0])
+        min_map = [[0 for i in xrange(n)] for i in xrange(m)]
+        for i in xrange(1, m):
+            for j in xrange(1, n):
+                min_map[i][j] = min(min_map[i-1][j]+grid[i-1][j], min_map[i][j-1]+grid[i][j-1])
+        return min_map[m-1][n-1]
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -1774,3 +1881,26 @@ if __name__ == "__main__":
     result58 = s.generateMatrix(n)
     for i in result58:
         print i
+
+    n = 6
+    k = 400
+    result60 = s.getPermutation(n, k)
+    s.p('getPermutation', [n,k], result60)
+
+    ln1 = lnode(1)
+    ln2 = lnode(2)
+    ln3 = lnode(3)
+    ln4 = lnode(4)
+    ln5 = lnode(5)
+    ln1.setNext(ln2)
+    ln2.setNext(ln3)
+    ln3.setNext(ln4)
+    ln4.setNext(ln5)
+    lnode().print_list(ln1)
+    result61 = s.rotateRight(ln1, 2)
+    lnode().print_list(result61)
+    
+    m = 3
+    n = 7
+    result62 = s.uniquePaths(m, n)
+    s.p('uniquePaths', [m, n], result62)
