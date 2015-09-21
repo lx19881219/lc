@@ -1598,10 +1598,67 @@ class solution:
         m = len(grid)
         n = len(grid[0])
         min_map = [[0 for i in xrange(n)] for i in xrange(m)]
+        min_map[0][0] = grid[0][0]
+        for i in xrange(1, m):
+            min_map[i][0] = min_map[i-1][0] + grid[i-1][0]
+        for j in xrange(1, n):
+            min_map[0][j] = min_map[0][j-1] + grid[0][j-1]
         for i in xrange(1, m):
             for j in xrange(1, n):
-                min_map[i][j] = min(min_map[i-1][j]+grid[i-1][j], min_map[i][j-1]+grid[i][j-1])
+                min_map[i][j] = min(min_map[i-1][j], min_map[i][j-1]) + grid[i][j]
         return min_map[m-1][n-1]
+
+    """
+    Validate if a given string is numeric.
+    """
+    def isNumber(self, string):
+        # Not Done
+        print 'isNumber'
+
+    """
+    Given a non-negative number represented as an array of digits, plus one to the number.
+
+    The digits are stored such that the most significant digit is at the head of the list.
+    """
+
+    def plusOne(self, digits):
+        flag = False
+        for i in xrange(len(digits)-1, -1, -1):
+            if digits[i] == 9:
+                digits[i] = 0
+                flag = True
+            else:
+                digits[i] += 1
+                flag = False
+                break
+        if flag:
+            digits = [1] + digits
+        return digits
+
+    """
+    Given two binary strings, return their sum (also a binary string).
+
+    For example,
+    a = "11"
+    b = "1"
+    Return "100". 
+    """
+    def addBinary(self, a, b):
+        la = len(a)
+        lb = len(b)
+        flag = 0
+        res = ''
+        while la >= 0 and lb >= 0:
+            sum_digit = int(a[la]) + int(b[lb]) + flag
+            new_digit = sum_digit % 2
+            if sum_digit > 1:
+                flag = 1
+            else:
+                flag = 0
+            res = char[new_digit] + res
+            la -= 1
+            lb -= 1
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -1904,3 +1961,7 @@ if __name__ == "__main__":
     n = 7
     result62 = s.uniquePaths(m, n)
     s.p('uniquePaths', [m, n], result62)
+
+    digits = [9, 9, 9]
+    result65 = s.plusOne(digits)
+    s.p('plusOne', digits, result65)
