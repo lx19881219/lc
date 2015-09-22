@@ -1644,8 +1644,8 @@ class solution:
     Return "100". 
     """
     def addBinary(self, a, b):
-        la = len(a)
-        lb = len(b)
+        la = len(a)-1
+        lb = len(b)-1
         flag = 0
         res = ''
         while la >= 0 and lb >= 0:
@@ -1655,9 +1655,135 @@ class solution:
                 flag = 1
             else:
                 flag = 0
-            res = char[new_digit] + res
+            res = str(new_digit) + res
             la -= 1
             lb -= 1
+        while la >= 0:
+            sum_digit = int(a[la]) + flag
+            new_digit = sum_digit % 2
+            if sum_digit > 1:
+                flag = 1
+            else:
+                flag = 0
+            res = str(new_digit) + res
+            la -=1
+        while lb >= 0:
+            sum_digit = int(b[lb]) + flag
+            new_digit = sum_digit % 2
+            if sum_digit > 1:
+                flag = 1
+            else:
+                flag = 0
+            res = str(new_digit) + res
+            lb -=1
+        if flag == 1:
+            res = '1' + res
+        return res
+    """
+    Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
+
+    You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly L characters.
+
+    Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+    For the last line of text, it should be left justified and no extra space is inserted between words.
+
+    For example,
+    words: ["This", "is", "an", "example", "of", "text", "justification."]
+    L: 16.
+
+    Return the formatted lines as:
+
+    [
+        "This    is    an",
+        "example  of text",
+        "justification.  "
+    ]
+
+    Note: Each word is guaranteed not to exceed L in length. 
+    """
+    def fullJustify(self, words, max_width):
+        """begin = 0
+        last_word = 0
+        spaces = 0
+        word = 0
+        while word < len(words):
+            line = ' ' * max_width
+            curr = len(word)
+            count = 1
+            while (curr + len(word)) <= max_width:
+                word += 1
+                curr += len(word)
+                count += 1
+            #last_word = word + 1
+            if count == 1:
+                space_list.append(' '*(max_width - curr))
+            else:
+                space = (max_width - curr) / (count - 1)
+                for c in xrange(count - 1):
+                    if (max_width - curr) % (count - 1) == 0:
+                        
+            space = (max_width - curr) / (count - 1)
+            if (max_width - curr) % (count - 1) != 0:
+    
+            for j in xrange(last_word, word+1):
+                line += word[j]
+                if count == 1:
+                    space = max_width - curr
+                    line += ' '*space
+                else:
+                    space = (max_width - curr) / (count - 1)
+                    if (max_width - curr) % (count - 1) == 0:
+                        line += ' ' * space
+                    else:
+                        space += """
+
+    """
+    Implement int sqrt(int x).
+
+    Compute and return the square root of x.
+    """
+    def mySqrt(self, x):
+        if x == 0:
+            return 0
+        left = 1
+        # because (x/2+1)**2>x
+        right = x/2 + 1
+        while left <= right:
+            mid = (left+right)/2
+            if mid**2 == x:
+                return mid
+            elif mid**2 > x:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return right
+
+    """
+    You are climbing a stair case. It takes n steps to reach to the top.
+
+    Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? 
+    """
+    def climbStairs(self, n):
+        # steps[n] = step[n-1] + step[n-2] + 2
+        if n == 0: return 0;
+        if n == 1: return 1;
+        if n == 2: return 2;
+        steps = [0 for i in xrange(n)]
+        steps[0] = 1
+        steps[1] = 2
+        for i in xrange(2, n):
+            steps[i] = steps[i-1] + steps[i-2]
+        return steps[-1]
+
+    """
+    Given an absolute path for a file (Unix-style), simplify it.
+
+    For example,
+    path = "/home/", => "/home"
+    path = "/a/./b/../../c/", => "/c"
+    """
+    def simplifyPath(self, path):
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -1965,3 +2091,16 @@ if __name__ == "__main__":
     digits = [9, 9, 9]
     result65 = s.plusOne(digits)
     s.p('plusOne', digits, result65)
+
+    a = '11'
+    b = '1'
+    result66 = s.addBinary(a, b)
+    s.p('addBinary', [a, b], result66)
+
+    x = 9
+    result68 = s.mySqrt(x)
+    s.p('mySqrt', x, result68)
+
+    n = 3
+    result69 = s.climbStairs(n)
+    s.p('climbStairs', n, result69)
