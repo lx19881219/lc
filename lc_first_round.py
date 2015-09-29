@@ -1784,6 +1784,78 @@ class solution:
     path = "/a/./b/../../c/", => "/c"
     """
     def simplifyPath(self, path):
+        paths = path.split('/')
+        stack = []
+        for i in xrange(len(paths)):
+            if paths[i] == '..':
+                if stack:
+                    print stack
+                    stack.pop()
+                else:
+                    continue
+            elif paths[i] == '.':
+                continue
+            elif paths[i]:
+                stack.append(paths[i])
+            else:
+                continue
+        res = '/' + '/'.join(stack)
+        return res
+    """
+     Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)
+
+     You have the following 3 operations permitted on a word:
+
+         a) Insert a character
+         b) Delete a character
+         c) Replace a character
+    """
+    def minDistance(self, word1, word2):
+        # DP, function: dp[i][j]  = min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+(0 if word1[i-1]==word2[j-1] else 1))
+        # where dp[i][j] is the distance from word1[0..i-1] to word2[0..j-1]
+        return None
+    """
+    Given a m x n matrix, if an element is 0, set its entire row and column to 0
+    Do it in place. 
+    """
+
+    def setZeros(self, matrix):
+        rownum = len(matrix)
+        colnum = len(matrix[0])
+        row = [False for i in xrange(rownum)]
+        col = [False for i in xrange(colnum)]
+        for i in xrange(rownum):
+            for j in xrange(colnum):
+                if matrix[i][j] == 0:
+                    row[i] = True
+                    col[j] = True
+        for i in xrange(rownum):
+            for j in xrange(colnum):
+                if i or j:
+                    matrix[i][j] = 0
+    """
+    Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+
+    Integers in each row are sorted from left to right.
+    The first integer of each row is greater than the last integer of the previous row.
+
+    """
+    def searchMatrix(self, matrix, target):
+        '''m = len(matrix)
+        n = len(matrix[0])
+        up = left = 0
+        down = m - 1
+        right = n - 1'''
+        i = 0
+        j = len(matrix[0]) - 1
+        while i < len(matrix) and j >= 0:
+            if matrix[i][j] == target:
+                return True
+            elif matrix[i][j] > target:
+                j -= 1
+            else:
+                i += 1
+        return False
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -2104,3 +2176,12 @@ if __name__ == "__main__":
     n = 3
     result69 = s.climbStairs(n)
     s.p('climbStairs', n, result69)
+
+    path = "/a/./b/../../c/"
+    result70 = s.simplifyPath(path)
+    s.p('simplifyPath', path, result70)
+
+    matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,50]]
+    target = 20
+    result74 = s.searchMatrix(matrix, target)
+    s.p('searchMatrix',[matrix, target], result74)
