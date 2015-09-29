@@ -1866,7 +1866,40 @@ class solution:
          You are not suppose to use the library's sort function for this problem. 
     """
     def sortColors(self, nums):
+        l = 0
+        r = len(nums) - 1
+        i = 0
+        while i < r:
+            if nums[i] == 0:
+                nums[i], nums[l] =  nums[l], nums[i]
+                l += 1
+                i += 1
+            elif nums[i] == 2:
+                nums[i], nums[r] =  nums[r], nums[i]
+                r -= 1
+            else:
+                i += 1
+    """
+     Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+     For example,
+     S = "ADOBECODEBANC"
+     T = "ABC"
+
+     Minimum window is "BANC".
+
+     Note:
+     If there is no such window in S that covers all characters in T, return the empty string "".
+
+     If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S. 
+    """
+    def minWindow(self, s, t):
         #TODO
+        
+
+    """
+    
+    """
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -2196,3 +2229,8 @@ if __name__ == "__main__":
     target = 20
     result74 = s.searchMatrix(matrix, target)
     s.p('searchMatrix',[matrix, target], result74)
+
+    nums = [0,1,2,2,1,2,2,0,0,0,2,1]
+    print nums
+    s.sortColors(nums)
+    print "sortColors", nums
