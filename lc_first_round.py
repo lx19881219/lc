@@ -1894,12 +1894,57 @@ class solution:
      If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S. 
     """
     def minWindow(self, s, t):
-        #TODO
-        
+        #TODO double pointer???
+        d = {}
+        for c in t:
+            if c not in d:
+                d[c] = 1
+            else:
+                d[c] += 1
+        res = []
+                
 
     """
-    
+    Given two integers n and k, return all possible combinations of k numbers out of 1 ... n. 
     """
+    def combine(self, n, k):
+        def dfs(start, l):
+            if len(l) == k:
+                res.append(l) 
+                return
+            for i in xrange(start, n+1):
+                dfs(i+1,l + [i])
+        res = []
+        dfs(1, [])
+        return res
+    """
+     Given a set of distinct integers, nums, return all possible subsets.
+
+     Note:
+
+    Elements in a subset must be in non-descending order.
+    The solution set must not contain duplicate subsets.
+
+    """
+    def subsets(self, nums):
+        def dfs(start, l):
+            res.append(l)
+            if start == len(nums):
+                return
+            for i in xrange(start, len(nums)):
+                dfs(i+1, l+[nums[i]])
+        nums.sort()
+        res = []
+        dfs(0, [])
+        return res
+
+    """
+     Given a 2D board and a word, find if the word exists in the grid.
+
+     The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. 
+     The same letter cell may not be used more than once. 
+    """
+    def exist(self, board, word):
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -2234,3 +2279,12 @@ if __name__ == "__main__":
     print nums
     s.sortColors(nums)
     print "sortColors", nums
+
+    n = 4
+    k = 2
+    result76 = s.combine(n, k)
+    s.p('combination', [n,k], result76)
+
+    nums = [1,2,3]
+    result77 = s.subsets(nums)
+    s.p('subsets', nums, result77)
