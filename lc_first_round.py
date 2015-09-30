@@ -1945,6 +1945,83 @@ class solution:
      The same letter cell may not be used more than once. 
     """
     def exist(self, board, word):
+        def dfs(curr, x, y):
+            if curr == len(word):
+                return True
+            if x > 0 and board[x-1][y] == word[curr]:
+                temp = board[x][y]
+                board[x][y] = '.'
+                if dfs(curr+1, x-1, y): return True
+                board[x][y] = temp
+            if x < len(board)-1 and board[x+1][y] == word[curr]:
+                temp = board[x][y]
+                board[x][y] = '.'
+                if dfs(curr+1, x+1, y): return True
+                board[x][y] = temp
+            if y > 0 and board[x][y-1] == word[curr]:
+                temp = board[x][y]
+                board[x][y] = '.'
+                if dfs(curr+1, x, y-1): return True
+                board[x][y] = temp
+            if y < len(board[0])-1 and board[x][y+1] == word[curr]:
+                temp = board[x][y]
+                board[x][y] = '.'
+                if dfs(curr+1, x, y+1): return True
+                board[x][y] = temp
+            return False
+        for i in xrange(len(board)):
+            for j in xrange(len(board[0])):
+                if board[i][j] == word[0]:
+                    return dfs(1, i, j)
+        return False
+
+    """
+     Follow up for "Remove Duplicates":
+     What if duplicates are allowed at most twice?
+
+     For example,
+     Given sorted array nums = [1,1,1,2,2,3],
+
+     Your function should return length = 5, with the first five elements of nums being 1, 1, 2, 2 and 3. It doesn't matter what you leave beyond the new length. 
+    """
+    def removeDuplicates(self, nums):
+        if len(nums)< 2:
+            return len(nums)
+        front = 2
+        back = 1
+        while front < len(nums):
+            if not (nums[front] == nums[back] and nums[front] == nums[back-1]):
+                back += 1
+                nums[back] = nums[front]
+            front += 1    
+        return back + 1
+
+    """
+    Follow up for "Search in Rotated Sorted Array":
+    What if duplicates are allowed?
+
+    Would this affect the run-time complexity? How and why?
+
+    Write a function to determine if a given target is in the array.
+    """
+    def searchRotateII(self, nums, target):
+        left = 0
+        right = len(nums) - 1
+        while left < right:
+            mid = (left+right)/2
+            if nums[mid] == target:
+                return True
+            elif nums[mid] > target:
+                if nums[left] > target:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            elif nums[mid] < target:
+                if nums[right] < target:
+                    right = mid -1
+                else:
+                    left = mid + 1
+        return False
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -2288,3 +2365,8 @@ if __name__ == "__main__":
     nums = [1,2,3]
     result77 = s.subsets(nums)
     s.p('subsets', nums, result77)
+
+    nums = [1,1,1,1,2,2,2,3,3,4]
+    print nums
+    result80 = s.removeDuplicates(nums)
+    s.p('removeDuplicates', nums, result80)
