@@ -2036,16 +2036,85 @@ class solution:
     def deleteDuplicatesList(self, head):
         if not head.nxt:
             return head
-        new_head = head
-        curr = head
-        while curr.nxt is not None:
-            if curr.val == curr.nxt.val:
+        dummy = lnode(0)
+        dummy.nxt = head
+        prev = dummy
+        curr = dummy.nxt
+        while prev.nxt:
+            while curr.nxt and curr.nxt.val == prev.nxt.val:
                 curr = curr.nxt
+            if curr == prev.nxt:
+                prev = prev.nxt
+                curr = prev.nxt
             else:
-                curr = curr.nxt
-                head.nxt = curr
-                head = head.nxt
+                prev.nxt = curr.nxt
+        return dummy.nxt
+
+    """
+     Given a sorted linked list, delete all duplicates such that each element appear only once.
+
+     For example,
+     Given 1->1->2, return 1->2.
+     Given 1->1->2->3->3, return 1->2->3. 
+    """
+    def deleteDuplicates(self, head):
+
+        if not head or not head.nxt:
+            return head
+        p = head
+        while p.nxt:
+            if p.val == p.nxt.val:
+                p.nxt = p.nxt.nxt
+            else:
+                p = p.nxt
         return head
+
+    """
+    Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, find the area of largest rectangle in the histogram. 
+    """
+    def largestRectangleArea(self, height):
+        res = 0
+        index = 0
+        h = height[0]
+        
+    """
+     Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
+    """
+    def maximalRectangle(self, matrix):
+        print ' 085 later'
+
+    """
+    Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+
+    You should preserve the original relative order of the nodes in each of the two partitions.
+
+    For example,
+    Given 1->4->3->2->5->2 and x = 3,
+    return 1->2->2->4->3->5. 
+    """
+
+    def partition(self, head, x):
+        if not head:
+            return head
+        l1 = lnode(0)
+        l2 = lnode(0)
+        res = l1
+        temp = l2
+        while head:
+            lnode().print_list(head)
+            if head.val < x:
+                l1.nxt = head
+                head = head.nxt
+                l1 = l1.nxt
+                l1.nxt = None
+            else:
+                l2.nxt = head
+                head = head.nxt
+                l2 = l2.nxt
+                l2.nxt = None
+            #head = head.nxt
+        l1.nxt = temp.nxt
+        return res.nxt
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -2412,4 +2481,33 @@ if __name__ == "__main__":
     result82 = s.deleteDuplicatesList(ln1)
     lnode().print_list(result82)
     
+    ln1 = lnode(1)
+    ln2 = lnode(2)
+    ln3 = lnode(2)
+    ln4 = lnode(4)
+    ln5 = lnode(5)
+    ln1.setNext(ln2)
+    ln2.setNext(ln3)
+    ln3.setNext(ln4)
+    ln4.setNext(ln5)
+    lnode().print_list(ln1)
+    result83 = s.deleteDuplicates(ln1)
+    lnode().print_list(result83)
+    
+    ln1 = lnode(1)
+    ln2 = lnode(4)
+    ln3 = lnode(3)
+    ln4 = lnode(2)
+    ln5 = lnode(5)
+    ln6 = lnode(2)
+    ln1.setNext(ln2)
+    ln2.setNext(ln3)
+    ln3.setNext(ln4)
+    ln4.setNext(ln5)
+    ln5.setNext(ln6)
+    lnode().print_list(ln1)
+    result86 = s.partition(ln1, 3)
+    lnode().print_list(result86)
+
+
 
