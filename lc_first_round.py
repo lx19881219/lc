@@ -2007,21 +2007,45 @@ class solution:
     def searchRotateII(self, nums, target):
         left = 0
         right = len(nums) - 1
-        while left < right:
+        while left <= right:
             mid = (left+right)/2
             if nums[mid] == target:
                 return True
-            elif nums[mid] > target:
-                if nums[left] > target:
+            if nums[left]==nums[mid]==nums[right]:
+                left += 1
+                right -= 1
+            elif nums[mid] >= nums[left]:
+                if nums[mid]>target>=nums[left]:
                     right = mid - 1
                 else:
                     left = mid + 1
-            elif nums[mid] < target:
-                if nums[right] < target:
-                    right = mid -1
-                else:
+            else:
+                if nums[right]>=target>nums[mid]:
                     left = mid + 1
+                else:
+                    right = mid - 1
         return False
+
+    """
+     Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+
+     For example,
+     Given 1->2->3->3->4->4->5, return 1->2->5.
+     Given 1->1->1->2->3, return 2->3. 
+    """
+    def deleteDuplicatesList(self, head):
+        if not head.nxt:
+            return head
+        new_head = head
+        curr = head
+        while curr.nxt is not None:
+            if curr.val == curr.nxt.val:
+                curr = curr.nxt
+            else:
+                curr = curr.nxt
+                head.nxt = curr
+                head = head.nxt
+        return head
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -2370,3 +2394,22 @@ if __name__ == "__main__":
     print nums
     result80 = s.removeDuplicates(nums)
     s.p('removeDuplicates', nums, result80)
+
+    nums = [1,1,2,3,4,5,1,1]
+    result81 = s.searchRotateII(nums, 2)
+    s.p('searchRotateII', [nums,2], result81)
+    
+    ln1 = lnode(1)
+    ln2 = lnode(2)
+    ln3 = lnode(2)
+    ln4 = lnode(4)
+    ln5 = lnode(5)
+    ln1.setNext(ln2)
+    ln2.setNext(ln3)
+    ln3.setNext(ln4)
+    ln4.setNext(ln5)
+    lnode().print_list(ln1)
+    result82 = s.deleteDuplicatesList(ln1)
+    lnode().print_list(result82)
+    
+
