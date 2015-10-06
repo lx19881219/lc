@@ -2115,6 +2115,118 @@ class solution:
             #head = head.nxt
         l1.nxt = temp.nxt
         return res.nxt
+    """
+    Given two strings s1 and s2 of the same length, determine if s2 is a scrambled string of s1. 
+    """
+    def isScramble(self, s1, s2):
+        if len(s1) != len(s2):
+            return False
+        if s1 == s2:
+            return True
+        for i in xrange(1, len(s1)):
+            if self.isScramble(s1[:i], s2[:i]) and self.isScramble(s1[i:],s2[i:]):
+                return True
+            if self.isScramble(s1[:i], s2[len(s1)-i:]) and self.isScramble(s1[i:], s2[:len(s1)-i]):
+                return True
+        return False
+
+    """
+    Given two sorted integer arrays nums1 and nums2, merge nums2 into nums1 as one sorted array.
+
+    Note:
+    You may assume that nums1 has enough space (size that is greater or equal to m + n) to hold additional elements from nums2. The number of elements initialized in nums1 and nums2 are m and n respectively.
+    """
+    def mergeSortedArray(self, nums1, m, nums2, n):
+        i, j, k = m-1, n-1, m+n-1
+        while i>=0 and j>=0:
+            if nums1[i]>nums2[j]:
+                nums1[k] = nums1[i]
+                i-=1
+            else:
+                nums1[k] = nums2[j]
+                j-=1
+            k -= 1
+        while j>=0:
+            nums1[k] = nums2[j]
+            j-=1
+            k-=1
+
+    """
+    The gray code is a binary numeral system where two successive values differ in only one bit.
+
+    Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray code. A gray code sequence must begin with 0.
+
+    For example, given n = 2, return [0,1,3,2]. Its gray code sequence is:
+
+        00 - 0
+        01 - 1
+        11 - 3
+        10 - 2
+
+        Note:
+        For a given n, a gray code sequence is not uniquely defined.
+
+        For example, [0,2,3,1] is also a valid gray code sequence according to the above definition.
+
+        For now, the judge is able to judge based on one instance of gray code sequence. Sorry about that.
+    """
+    def grayCode(self, n):
+        # Math Magic 
+        res = []
+        size = 1<<n
+        print size
+        for i in xrange(size):
+            res.append((i>>1)^i)
+            print res
+        return res
+
+    """
+     Given a collection of integers that might contain duplicates, nums, return all possible subsets.
+
+     Note:
+
+        Elements in a subset must be in non-descending order.
+        The solution set must not contain duplicate subsets.
+
+    """
+    def subsetWithDup(self, nums):
+        def dfs(depth, pos, subset):
+            if subset not in res:
+                res.append(subset)
+            if depth == len(nums):
+                return
+            for i in xrange(pos, len(nums)):
+                dfs(depth + 1, i+1, subset + [nums[i]])
+        nums.sort()
+        res = []
+        dfs(0, 0, [])
+        return res
+
+    """
+    Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+    For example:
+        Given "25525511135",
+
+        return ["255.255.11.135", "255.255.111.35"]. (Order does not matter) 
+    """
+    def restoreIpAddress(self, string):
+        def dfs(remain, dot_number, ip):
+            if dot_number == 4:
+                if remain == '':
+                    res.append(ip[1:])
+                return 
+            for i in xrange(1, 4):
+                if i <= len(remain) and int(remain[:i]) <= 255:
+                    if str(int(remain[:i])) == remain[:i]:
+                        dfs(remain[i:], dot_number+1, ip + '.'+ remain[:i])
+                    else:
+                        break
+        res = []
+        '''if len(s) < 4 or len(s) > 12:
+            return res'''
+        dfs(string, 0, '')
+        return res
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -2509,5 +2621,25 @@ if __name__ == "__main__":
     result86 = s.partition(ln1, 3)
     lnode().print_list(result86)
 
+    s1 = "sqksrqzhhmfmlmqvlbnaqcmebbkqfy"
+    s2 = "abbkyfqemcqnblvqmlmfmhhzqrskqs"
+    result87 = s.isScramble(s1, s2)
+    s.p('isScramble', [s1, s2], result87)
 
+    nums1 = [1,3,5,6,7,9,-1,-1,-1,-1]
+    nums2 = [2,3,4,5]
+    print [nums1, nums2]
+    s.mergeSortedArray(nums1, 6, nums2, 4)
+    print nums1
 
+    n = 2
+    result89 = s.grayCode(n)
+    s.p('grayCode', n, result89)
+
+    nums = [1,2,2]
+    result90 = s.subsetWithDup(nums)
+    s.p('subsetWithDup', nums, result90)
+
+    string = '25525511135'
+    result93 = s.restoreIpAddress(string)
+    s.p('restureIpAddress', string, result93)
