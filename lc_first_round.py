@@ -2116,7 +2116,51 @@ class solution:
         l1.nxt = temp.nxt
         return res.nxt
 
-    def to_home_brunch():
+    def numDecodings(self, s):
+        #use DP
+        if s == '' or s[0] == '0':
+            return 0
+        dp = [1, 1]
+        for i in xrange(2, len(s)+1):
+            if 10 <= int(s[i-2:i]) <= 26 and s[i-1] != 0:
+                dp.append(dp[i-1]+dp[i-2])
+            elif int(s[i-2:i]) == 10 or int(s[i-2:i]) == 20:
+                dp.append(dp[i-2])
+            elif s[i-1] != 0:
+                dp.append(dp[i-1])
+            else:
+                return 0
+        return dp[len(s)]
+
+    """
+     Reverse a linked list from position m to n. Do it in-place and in one-pass.
+
+     For example:
+         Given 1->2->3->4->5->NULL, m = 2 and n = 4,
+
+         return 1->4->3->2->5->NULL.
+
+     Note:
+         Given m, n satisfy the following condition:
+             1 <= m <= n <= length of list. 
+    """
+    def reverseBetween(self, head, m, n):
+        #confusing..........
+        if head == None:
+            return head
+        dummy = curr = prev = temp = lnode(0)
+        dummy.nxt = head
+        curr = dummy
+        for i in xrange(m-1):
+            curr = curr.nxt
+        prev = curr.nxt
+        for i in xrange(n-m):
+            temp = curr.nxt
+            curr.nxt = prev.nxt
+            prev.nxt = prev.nxt.nxt
+            curr.nxt.nxt = temp
+        return dummy.nxt
+
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
@@ -2511,5 +2555,22 @@ if __name__ == "__main__":
     result86 = s.partition(ln1, 3)
     lnode().print_list(result86)
 
+    string = '12'
+    result91 = s.numDecodings(string)
+    s.p('numsEncoding', string, result91)
 
+    ln1 = lnode(1)
+    ln2 = lnode(4)
+    ln3 = lnode(3)
+    ln4 = lnode(2)
+    ln5 = lnode(5)
+    ln6 = lnode(2)
+    ln1.setNext(ln2)
+    ln2.setNext(ln3)
+    ln3.setNext(ln4)
+    ln4.setNext(ln5)
+    ln5.setNext(ln6)
+    lnode().print_list(ln1)
+    result92 = s.reverseBetween(ln1, 2, 4)
+    lnode().print_list(result92)
 
