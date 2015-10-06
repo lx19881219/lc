@@ -2116,6 +2116,8 @@ class solution:
         l1.nxt = temp.nxt
         return res.nxt
 
+    def to_home_brunch():
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
