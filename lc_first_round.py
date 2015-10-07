@@ -22,6 +22,20 @@ class interval:
         self.start = s
         self.end = e
 
+class tnode:
+    def __init__(self, value):
+        self.val = value
+        self.left = None
+        self.right = None
+
+    def print_tree(sefl, root):
+        if root:
+            print root.val
+        if root.left:
+            self.print(root.left)
+        if root.right:
+            self.print_tree(root.right)
+
 class solution:
     """
     Given an array of integers, find two numbers such that they add up to a specific target number.
@@ -2161,7 +2175,44 @@ class solution:
             curr.nxt.nxt = temp
         return dummy.nxt
 
+    """
+    Given a binary tree, return the inorder traversal of its nodes' values.
+    """
+    def inorderTraverseRec(self, root):
+        def traverse(root):
+            if root:
+                traverse(root.left)
+                res.append(root.val)
+                traverse(root.right)
+        res = []
+        traverse(root)
+        return res
 
+    def inorderTraverseRec(self, root):
+        res = []
+        stack = []
+        '''while root or stack:
+            if root:
+                stack.append(root)
+                root = root.left
+            else:
+                root = stack.pop()
+                res.append(root.val)
+                root = root.right'''
+        # Faster
+        while root or stack:
+            while root:
+                stack.append(root)
+            root = stack.pop()
+            res.append(root.val)
+            root = root.right
+        return res
+
+    """
+    Given n, generate all structurally unique BST's (binary search trees) that store values 1...n.
+    """
+    def generateTrees(self, n):
+        
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
