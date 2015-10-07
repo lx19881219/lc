@@ -2228,6 +2228,66 @@ class solution:
         dfs(string, 0, '')
         return res
 
+    """
+    Given n, generate all structurally unique BST's (binary search trees) that store values 1...n.
+    """
+    def generateTrees(self, n):
+        def dfs(start, end):
+            if start > end:
+                return [None]
+            res = []
+            for rootval in xrange(start, end+1):
+                left_tree = dfs(start, rootval-1)
+                right_tree = dfs(rootval+1, end)
+                for i in left_tree:
+                    for j in right_tree:
+                        root = tnode(rootval)
+                        root.left = i
+                        root.right = j
+                        res.append(root)
+            return res
+        return dfs(1, n)
+
+    """
+    Given n, how many structurally unique BST's (binary search trees) that store values 1...n?
+    """
+    def numTrees(self, n):
+        # DP dp[0] = 0, dp[1] = 1, dp[2] = 1, dp[n]=dp[0]*dp[n-1]+dp[1]*dp[n-2]+...+dp[n-1]*dp[0]
+        dp = [1,1,2]
+        if n<=2:
+            return dp[n]
+        dp += [0 for i in xrange(n-2)]
+        for i in xrange(3, n+1):
+            for j in xrange(1, i+1):
+                dp[i] += dp[j-1]*dp[i-j]
+        return dp[n]
+
+    """
+     Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.
+
+     For example,
+     Given:
+         s1 = "aabcc",
+         s2 = "dbbca",
+
+         When s3 = "aadbbcbcac", return true.
+         When s3 = "aadbbbaccc", return false. 
+    """
+    def isInterleave(self, s1, s2, s3):
+        # DP using a 2D array to store result
+        if len(s1)+len(s2) != len(s3):
+            return False
+        dp = [[False for i in xrange(len(s2)+1)] for i in xrange(len(s1)+1)]
+        dp[0][0] = True
+        for i in xrange(1, len(s1)+1):
+            dp[i][0] = dp[i-1][0] and s3[i-1] == s1[i-1]
+        for i in xrange(1, len(s2)+1):
+            dp[0][i] = dp[0][i-1] and s3[i-1] == s2[i-1]
+        for i in xrange(1, len(s1)+1):
+            for j in xrange(1, len(s2)+1):
+                dp[i][j] = (dp[i-1][j] and s1[i-1]==s3[i+j-1]) or (dp[i][j-1] and s2[j-1]==s3[i+j-1])
+        return dp[len(s1)][len(s2)]
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -2643,3 +2703,9 @@ if __name__ == "__main__":
     string = '25525511135'
     result93 = s.restoreIpAddress(string)
     s.p('restureIpAddress', string, result93)
+
+    s1 = "aabcc"
+    s2 = "dbbca"
+    s3 = "aadbbcbcac"
+    result97 = s.isInterleave(s1, s2, s3)
+    s.p('isInterleave', [s1, s2, s3], result97)
