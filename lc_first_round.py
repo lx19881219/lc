@@ -2288,6 +2288,212 @@ class solution:
                 dp[i][j] = (dp[i-1][j] and s1[i-1]==s3[i+j-1]) or (dp[i][j-1] and s2[j-1]==s3[i+j-1])
         return dp[len(s1)][len(s2)]
 
+    """
+    Given a binary tree, determine if it is a valid binary search tree (BST).
+
+    Assume a BST is defined as follows:
+
+    The left subtree of a node contains only nodes with keys less than the node's key.
+    The right subtree of a node contains only nodes with keys greater than the node's key.
+    Both the left and right subtrees must also be binary search trees.
+
+    """
+    def isValidBST(self, root):
+        def checkBST(root, minimum, maximum):
+            if root == None:
+                return True
+            if root.val <= minimum or root.val >= maximum:
+                return False
+            return checkBST(root.left, minimum, root.val) and checkBST(root.right, root.val, maximum)
+        return checkBST(root, -10**10, 10**10)
+
+    """
+     Two elements of a binary search tree (BST) are swapped by mistake.
+
+     Recover the tree without changing its structure.
+     Note:
+         A solution using O(n) space is pretty straight forward. Could you devise a constant space solution? 
+    """
+    '''def recoverTree(self, root):
+         def checkBST(root, minimum, maximum):
+            if root == None:
+                return
+            if root.val <= minimum:
+                n1 = root    
+            elif root.val >= maximum:
+                n2 = root
+                return
+            checkBST(root.left, minimum, root.val)
+            checkBST(root.right, root.val, maximum)
+        n1 = n2 = None
+        checkBST(root, -10**10, 10**10)
+        if n1 and n2:
+            n1.val, n2.val = n2.val, n1.val
+        return root'''
+    
+    """
+     Given two binary trees, write a function to check if they are equal or not.
+
+     Two binary trees are considered equal if they are structurally identical and the nodes have the same value. 
+    """
+    def isSameTree(self, root1, root2):
+        if root1 is None and root2 is None:
+            return True
+        if root1 and root2 and root1.val == root2.val:
+            return self.isSameTree(root1.left, root2.left) and self.isSameTree(root1.right, root2.right)
+        return False
+
+    """
+    Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+    """
+    def isSymmetric(self, root):
+        def check(p, q):
+            if p is None and q is None:
+                return True
+            if p and q and p.val == q.val:
+                return check(p.left, q.right) and check(p.right, q.left)
+            return False
+        if root:
+            return check(root.left, root.right)
+        return True
+
+    """
+    Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+    """
+    def levelOrder(self, root):
+        def dfs(root, level):
+            if root is None:
+                return
+            if level < len(res):
+                res[level].append(root.val)
+            else:
+                res.append([root.val])
+            dfs(root.left, level + 1)
+            dfs(root.right, level + 1)
+        res = []
+        dfs(root, 0)
+        return res
+
+    """
+    Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+    """
+    def zigzagLevelOrder(self, root):
+        def dfs(root, level):
+            if root is None:
+                return
+            if level < len(res):
+                if level % 2 == 0:
+                    res[level].append(root.val)
+                else:
+                    res[level] = [root.val] + res[level]
+            else:
+                res.append([root.val])
+            dfs(root.left, level + 1)
+            dfs(root.right, level + 1)
+        res = []
+        dfs(root, 0)
+        return res
+
+    """
+    Given a binary tree, find its maximum depth.
+
+    The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+    """
+    def maxDepth(self, root):
+        if root is None:
+            return 0
+        else:
+            return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
+    """
+    Given inorder and postorder traversal of a tree, construct the binary tree.
+
+    Note:
+        You may assume that duplicates do not exist in the tree. 
+    """
+    def buildTree(self, inorder, postorder):
+        if not inorder:
+            return None
+        if len(inorder) == 1:
+            return ListNode(inorder[0])
+        root = ListNode(postorder[-1])
+        root_index = inorder.index(postorder[-1])
+        root.left = self.buildTree(inorder[:root_index], postorder[:root_index])
+        root.right = self. buildTree(inorder[root_index+1:], [root_index:len(postorder)-1])
+        return root
+
+    """
+    Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
+    """
+    def levelOrderBottom(self, root):
+        def dfs(root, level):
+            if root == None:
+                return
+            if level >= len(res):
+                res.append([root.val])
+            else:
+                res[level].append(root.val)
+            dfs(root.left, level+1)
+            dfs(root.right, level+1)
+        res = []
+        dfs(root, 0)
+        return reversed(res)
+        
+    """
+    Given a binary tree, find its minimum depth.
+
+    The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+    """
+    def minDepth(self, root):
+        if root is None:
+            return 0
+        if root.left is None and root.right is not None:
+            return self.minDepth(root.right)+1
+        if root.left is not None and root.right is None:
+            return self.minDepth(root.left)+1
+        return min(self.minDepth(root.left), self.minDepth(root.right))+1
+    """
+    Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum. 
+    """
+    def hasPathSum(self, root, target):
+        if root is None:
+            return False
+        if root.left is None and root.right is None:
+            return root.val == target
+        return self.hasPathSum(root.left, target-root.val) or self.hasPathSum(root.right, target-root.val)
+
+    """
+    Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum. 
+    """
+    def pathSum(self, root, target):
+        def dfs(root, target, nums):
+            if root is None:
+                return None
+            if root.left is None and root.right is None and root.val == target:
+                res.append(nums+[root.val])
+            dfs(root.left, target-root.val, nums+[root.val])
+            dfs(root.right, target-root.val, nums+[root.val])
+        res = []
+        dfs(root, target, [])
+        return res
+
+    """
+    Given a binary tree, flatten it to a linked list in-place. 
+    """
+    def flattern(self, root):
+        if root is None:
+            return
+        self.flatten(root.left)
+        self.flatten(root.right)
+        temp = root
+        if temp.left is None:
+            return
+        temp = temp.left
+        while temp.right:
+            temp = temp.right
+        temp.right = root.right
+        root.right = root.left
+        root.left = None
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
