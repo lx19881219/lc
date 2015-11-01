@@ -28,13 +28,13 @@ class tnode:
         self.left = None
         self.right = None
 
-    def print_tree(sefl, root):
+    '''def print_tree(sefl, root):
         if root:
             print root.val
         if root.left:
             self.print(root.left)
         if root.right:
-            self.print_tree(root.right)
+            self.print_tree(root.right)'''
 
 class solution:
     """
@@ -2209,10 +2209,252 @@ class solution:
         return res
 
     """
-    Given n, generate all structurally unique BST's (binary search trees) that store values 1...n.
+    Given preorder and inorder traversal of a tree, construct the binary tree.
+
+    Note:
+        You may assume that duplicates do not exist in the tree. 
     """
-    def generateTrees(self, n):
+    def buildTree(self, preorder, inorder):
+        if not preorder:
+            return None
+        root = TreeNode(preorder[0])
+        root_pos = inorder.index(preorder[0]) # Get root's position in inorder
+        root.left = self.buildTree(preorder[1, 1+root_pos], inorder[:root_pos])
+        root.right = self.buildTree(preorder[root_pos+1:], inorder[root_pos+1:])
+        return root
         
+    """
+    Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+    """
+    def sortedArrayToBST(self, nums):
+        def dfs(start, end):
+            if start > end:
+                return None
+            mid = (end+start)/2
+            root = TreeNone(nums[mid])
+            root.left = dfs(start, mid-1)
+            root.right = dfs(mid+1, end)
+            return root
+        return dfs(0, len(nums)-1)
+
+    """
+    Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
+    """
+    def sortListToBST(self, head):
+        def dfs(head, end):
+            if head is end:
+                return None
+            first = second = head
+            length = 0
+            while first.next != end:
+                length += 1
+                if length%2 == 0:
+                    second = second.next
+                first = first.next
+            root = TreeNode(second.val)
+            root.left = dfs(head, second)
+            root.right = dfs(second.next, end)
+            return root
+        return dfs(head, None)
+
+    """
+    Given a binary tree, determine if it is height-balanced.
+
+    For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+    """
+    def isBalanced(self, root):
+        def height(root):
+            if root is None:
+                return 0
+            return max(height(root.left), height(root.right))+1
+        def dfs(root):
+            if root == None:
+                return True
+            if abs(height(root.left)-height(root.right))<=1:
+                return dfs(root.left) and dfs(root.right)
+            else:
+                return False
+
+    """
+     Given a string S and a string T, count the number of distinct subsequences of T in S.
+
+     A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, "ACE" is a subsequence of "ABCDE" while "AEC" is not).
+
+     Here is an example:
+         S = "rabbbit", T = "rabbit"
+
+         Return 3. 
+    """
+    def numDistinct(self, s, t):
+        # use DP
+        dp = [[0 for j in xrange(len(t)+1)] for i in xrange(len(s)+1)]
+        # init, all s[0][j] = 0
+        for i in xrange(len(s)+1):
+            dp[i][0] = 1
+        for i in xrange(1, len(s)+1):
+            for j in xrange(1, len(t)+1):
+                if s[i-1] == t[j-1]:
+                    dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
+                else:
+                    dp[i][j] = dp[i-1][j]
+        return dp[len(s)][len(t)]
+
+    """
+     Given a binary tree
+
+        struct TreeLinkNode {
+            TreeLinkNode *left;
+            TreeLinkNode *right;
+            TreeLinkNode *next;
+        }
+
+         Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+         Initially, all next pointers are set to NULL.
+    """
+    def connect(self, root):
+        if root and root.left:
+            root.left.next = root.right
+            if root.next:
+                root.right.next = root.next.left
+            else:
+                root.right.next = None
+            self.connect(root.left)
+            self.connect(root.right)
+
+    """
+    Follow up for problem "Populating Next Right Pointers in Each Node".
+
+    What if the given tree could be any binary tree? Would your previous solution still work?
+    """
+    def connect2(self, root):
+        #build next line when traverse current line
+        while root:
+            first_node_in_next_level = None
+            prev = None
+            while root:
+                if not first_node_in_next_level:
+                    first_node_in_next_level = root.left if root.left else root.right
+                if root.left:
+                    if prev:
+                        prev.next = root.left
+                    prev = root.left
+                if root.right:
+                    if prev:
+                        prev.next = root.right
+                    prev = root.right
+                root = root.next
+            root = first_node_in_next_level
+    
+    """
+    Given numRows, generate the first numRows of Pascal's triangle.
+    """
+    def pascal(self, numRows):
+        res = []
+        if numRows == 1:
+            res = [[1]]
+        elif numRows == 2:
+            res = [[1],[1,1]]
+        else:
+            res = [[1],[1,1]]
+            for i in xrange(2, numRows):
+                curr_row = [1]
+                print len(res[-1])-1
+                for j in xrange(len(res[-1])-1):
+                    curr_row.append(res[-1][j]+res[-1][j+1])
+                curr_row.append(1)
+                print curr_row
+                res.append(curr_row)
+        return res
+
+    """
+    Given an index k, return the kth row of the Pascal's triangle.
+
+    For example, given k = 3,
+    Return [1,3,3,1].
+
+    Note:
+        Could you optimize your algorithm to use only O(k) extra space? 
+    """
+    def pascal2(self, rowIndex):
+        res = [1]
+        if rowIndex < 1:
+            return res
+        for i in xrange(1, rowIndex+1):
+            curr = 1
+            for j in xrange(1, len(res)):
+                prev = curr
+                curr = res[j]
+                res[j] = res[j] + prev
+            res.append(1)
+        return res
+
+    """
+     Given a binary tree, find the maximum path sum.
+
+     For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path does not need to go through the root.
+    """
+    def maxPathSum(self, root):
+        def dfs(root):
+            if root == None:
+                return 0
+            left = dfs(root.left)
+            right = dfs(root.right)
+            res[0] = max(res[0], left+right+root.val)
+            root.val = max(0, left+root.val, right+root.val))
+            return root.val
+        res = [-10**10]
+        dfs(root)
+        return res[0]
+    """
+     Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+     For example,
+     "A man, a plan, a canal: Panama" is a palindrome.
+     "race a car" is not a palindrome. 
+    """
+    def isPalindrome(self, string):
+        if string == "":
+            return True
+        #string = "".join(string.split())
+        start = 0
+        end = len(string)-1
+        while start<end:
+            while start<end and not s[start].isalnum():
+                start +=1
+            while start<end and not s[end].isalnum():
+                end -=1
+            if start < end and string[start].lower() != string[end].lower():
+                return False
+        return True
+
+    """
+    Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation sequence from beginWord to endWord, such that:
+
+    Only one letter can be changed at a time
+    Each intermediate word must exist in the word list
+    """
+    def ladderLength(self, beginWord, endWord, wordList):
+        wordList.add(endWord)
+        l = len(beginWord)
+        q = []
+        q.append((beginWord, 1))
+        while q:
+            temp = q.pop(0)
+            currWord = temp[0]
+            currLen = temp[1]
+            if currWord == endWord:
+                return currLen
+            for i in xrange(len(currWord)):
+                part1 = currWord[:i]
+                part2 = currWord[i+1:]
+                for j in "abcdefghijklmnopqrstuvwxyz":
+                    if currWord[i] != j:
+                        nextWord = part1 + j + part2
+                        if nextWord in wordList:
+                            q.append((nextWord, currLen+1))
+                            wordList.remove(nextWord)
+        return 0
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -2625,3 +2867,10 @@ if __name__ == "__main__":
     result92 = s.reverseBetween(ln1, 2, 4)
     lnode().print_list(result92)
 
+    numRows = 3
+    result118 = s.pascal(numRows)
+    s.p('pascal', numRows, result118)
+
+    rowIndex = 3
+    result119 = s.pascal2(rowIndex)
+    s.p('pascal2', rowIndex, result119)
