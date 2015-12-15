@@ -2401,7 +2401,7 @@ class solution:
             left = dfs(root.left)
             right = dfs(root.right)
             res[0] = max(res[0], left+right+root.val)
-            root.val = max(0, left+root.val, right+root.val))
+            root.val = max(0, left+root.val, right+root.val)
             return root.val
         res = [-10**10]
         dfs(root)
@@ -2455,6 +2455,101 @@ class solution:
                             q.append((nextWord, currLen+1))
                             wordList.remove(nextWord)
         return 0
+    def longestConsecutive(self, nums):
+        nums.sort()
+        max_len = 1
+        temp = 1
+        for i in xrange(len(nums)):
+            if nums[i] == nums[i-1] + 1:
+                temp += 1
+            elif nums[i] == nums[i-1]:
+                continue
+            else:
+                if max_len < temp: max_len = temp
+                temp = 1
+        if max_len < temp: max_len = temp
+        return max_len
+
+    """
+    Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.
+
+    An example is the root-to-leaf path 1->2->3 which represents the number 123.
+
+    Find the total sum of all root-to-leaf numbers.
+    """
+    def sumNumbers(self, root):
+        def dfs(root, total):
+            if root is None:
+                return
+            total = total*10 + root.val
+            if root.left is None and root.right is None:
+                res[0] += total
+            dfs(root.left, total)
+            dfs(root.right, total)
+        res = [0]
+        dfs(root, 0)
+        return res[0]
+    """
+    Given a 2D board containing 'X' and 'O', capture all regions surrounded by 'X'.
+
+    A region is captured by flipping all 'O's into 'X's in that surrounded region.
+    """
+    def surroundRegions(self, board):
+        #save for later
+    """
+    Given a string s, partition s such that every substring of the partition is a palindrome.
+
+    Return all possible palindrome partitioning of s.
+    """
+    def palidromePartition(self, string):
+        def isPalidrome(string):
+            for i in xrange(len(string)):
+                if string[i] != string[len(string)-1-i]:
+                    return False
+            return True
+        def dfs(remain, curr):
+            if len(remain) == 0:
+                res.append(curr)
+            for i in xrange(1, len(remain)+1):
+                if isPalidrome(remain[:i]):
+                    dfs(remain[i:], curr+[remain[:i]])
+        res = []
+        dfs(string, [])
+        return res
+    """
+    Given a string s, partition s such that every substring of the partition is a palindrome.
+
+    Return the minimum cuts needed for a palindrome partitioning of s.
+    """
+    def minPalidromePartition(self, string):
+        #use DP
+    
+    """
+    Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.
+    """
+    def cloneGraph(self, node):
+        def dfs(input_node, node_map):
+            if input_node in node_map:
+                return node_map[input_node]
+            output_node = UndirectedGraphNode(input_node.label)
+            node_map[input_node] = output_node
+            for neighbor in input_node.neighbors:
+                output_node.neighbors.append(dfs(neighbor, node_map))
+            return output_node
+        if node is None:
+            return None
+        return dfs(node, {})
+
+    """
+    There are N gas stations along a circular route, where the amount of gas at station i is gas[i].
+
+    You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from station i to its next station (i+1). You begin the journey with an empty tank at one of the gas stations.
+
+    Return the starting gas station's index if you can travel around the circuit once, otherwise return -1.
+    """
+    def canCompleteCircuit(self, gas, cost):
+
+
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
 	
@@ -2874,3 +2969,7 @@ if __name__ == "__main__":
     rowIndex = 3
     result119 = s.pascal2(rowIndex)
     s.p('pascal2', rowIndex, result119)
+
+    nums = [100, 4, 200, 1, 3, 2]
+    result128 = s.longestConsecutive(nums)
+    s.p('longestConsecutive', nums, result128)
