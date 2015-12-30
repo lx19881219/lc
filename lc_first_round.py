@@ -34,6 +34,7 @@ class solution:
     Output: index1=1, index2=2
     """
     def two_sum(self, arr, target):
+        # Use Dict
 	if len(arr) < 2:
 	    return None
 	d = {}
@@ -1600,9 +1601,9 @@ class solution:
         min_map = [[0 for i in xrange(n)] for i in xrange(m)]
         min_map[0][0] = grid[0][0]
         for i in xrange(1, m):
-            min_map[i][0] = min_map[i-1][0] + grid[i-1][0]
+            min_map[i][0] = min_map[i-1][0] + grid[i][0]
         for j in xrange(1, n):
-            min_map[0][j] = min_map[0][j-1] + grid[0][j-1]
+            min_map[0][j] = min_map[0][j-1] + grid[0][j]
         for i in xrange(1, m):
             for j in xrange(1, n):
                 min_map[i][j] = min(min_map[i-1][j], min_map[i][j-1]) + grid[i][j]
@@ -2493,6 +2494,182 @@ class solution:
         temp.right = root.right
         root.right = root.left
         root.left = None
+
+    """
+    Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+    """
+    def minTotal(self, triangle):
+        # use dp
+        if not triangle:
+            return 0
+        dp = [0 for i in xrange(len(triangle))]
+        dp[0] = triangle[0][0]
+        for i in xrange(1, len(triangle)):
+            # traverse from back, it won't broke the prev row's value
+            for j in xrange(len(triangle[i])-1, -1, -1):
+                if j == 0:
+                    dp[j] = dp[j] + triangle[i][j]
+                elif j == len(triangle[i])-1:
+                    dp[j] = dp[j-1] + triangle[i][j]
+                else:
+                    dp[j] = min(dp[j-1], dp[j]) + triangle[i][j]
+        return min(dp)
+
+    """
+    Say you have an array for which the ith element is the price of a given stock on day i.
+
+    If you were only permitted to complete at most one transaction (ie, buy one and sell one share of the stock), design an algorithm to find the maximum profit.
+    """
+    def maxProfit(self, prices):
+        if not prices:
+            return 0
+        curr_min = prices[0]
+        res = 0
+        for i in xrange(1, len(prices)):
+            if prices[i] - curr_min > res:
+                res = prices[i] - curr_min
+            if prices[i] < curr_min:
+                curr_min = prices[i]
+        return res
+
+    """
+    Say you have an array for which the ith element is the price of a given stock on day i.
+
+    Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+    """
+    def maxProfit2(self, prices):
+        if not price:
+            return 0
+        res = 0
+        for i in xrange(1, len(prices)):
+            if prices[i] > prices[i-1]:
+                res += prices[i] - prices[i-1]
+        return res
+                
+    """
+    Say you have an array for which the ith element is the price of a given stock on day i.
+
+    Design an algorithm to find the maximum profit. You may complete at most two transactions.
+
+    Note:
+    You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+    """
+    def maxProfit3(self, prices):
+        #two array: f1[i] is max profit from day1 to dayi
+        #           f2[i] is max profit from dayi to last day
+        if not prices:
+            return 0
+        f1 = [0 for i in xrange(len(prices))]
+        f2 = [0 for i in xrange(len(prices))]
+        curr_min = prices[0]
+        for i in xrange(1, len(prices)):
+            curr_min = min(curr_min, prices[i])
+            f1[i] = max(f1[i-1], prices[i] - curr_min)
+        curr_max = prices[len(prices)-1]
+        for i in xrange(len(prices)-2, -1, -1):
+            curr_max = max(curr_max, prices[i])
+            f2[i] = max(f2[i+1], curr_max - prices[i])
+        res = 0
+        for i in xrange(len(prices)):
+            res = max(res, f1[i]+f2[i])
+        return res
+
+    """
+     There are N gas stations along a circular route, where the amount of gas at station i is gas[i].
+
+     You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from station i to its next station (i+1). You begin the journey with an empty tank at one of the gas stations.
+
+     Return the starting gas station's index if you can travel around the circuit once, otherwise return -1. 
+    """
+    def canCompleteCircuit(self, gas, cost):
+        # if remained gas + gas that can fill can not reach to next station, mark next station as start
+        if sum(gas) < sum(cost):
+            return -1
+        remain = 0
+        res = 0
+        for i in xrange(len(gas)):
+            remain += gas[i]-cost[i]
+            if remain < 0:
+                res = i+1
+                remain = 0
+        return res
+
+    """
+    Given an array of integers, every element appears twice except for one. Find that single one.
+
+    Note:
+        Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory? 
+    """
+    def singleNumber(self, nums):
+        # using xor
+        ans = nums[0]
+        for i in xrange(len(nums)):
+            ans = ans^ nums[i]
+        return ans
+            
+    """
+     Given an array of integers, every element appears three times except for one. Find that single one.
+
+     Note:
+     Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+     Subscribe to see which companies asked this question
+
+    """
+    def singleNumber2(self, nums):
+        return 
+
+    """
+     Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+     For example, given
+     s = "leetcode",
+     dict = ["leet", "code"].
+
+     Return true because "leetcode" can be segmented as "leet code". 
+    """
+    def wordBreak(self, s, wordDict):
+        dp = [False for i in xrange(len(s))+1]
+        dp[0] = True
+        for i in xrange(1, len(s)+1):
+            for j in xrange(i):
+                if dp[j] and s[j:i] in wordDict:
+                    dp[i] = True
+        return dp[len(s)]
+
+    """
+     Given a linked list, determine if it has a cycle in it.
+
+     Follow up:
+         Can you solve it without using extra space? 
+    """
+    def hasCycle(self, head):
+        first = head
+        second = head
+        while first and first.next:
+            first = first.next.next
+            second = second.next
+            if first == second:
+                return True
+        return False
+
+    """
+     Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+     Note: Do not modify the linked list.
+
+     Follow up:
+     Can you solve it without using extra space? 
+    """
+    def detectCycle(self, head):
+        first = head
+        second = head
+        while first and first.next:
+            first = first.next.next
+            second = second.next
+            if first == second:
+                return first
+        return None
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
