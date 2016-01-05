@@ -2405,6 +2405,30 @@ class solution:
             return 0
         else:
             return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
+
+    def maxDepth_iter(self, root):
+        # res list record the deepest node
+        if root == None:
+            return 0
+        stack = [root]
+        depth = [1]
+        max_depth = 0
+        res = []
+        while stack:
+            node = stack.pop()
+            d = depth.pop()
+            if d > max_depth:
+                res = [node]
+                max_depth = d
+            elif d == max_depth:
+                res.append(node)
+            if node.left:
+                stack.append(node.left)
+                depth.append(d+1)
+            if node.right:
+                stack.append(node.right)
+                depth.append(d+1)
+        return max_depth
     """
     Given inorder and postorder traversal of a tree, construct the binary tree.
 
@@ -2670,6 +2694,39 @@ class solution:
             if first == second:
                 return first
         return None
+
+    """
+     Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+     reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+
+     You must do this in-place without altering the nodes' values.
+
+     For example,
+     Given {1,2,3,4}, reorder it to {1,4,2,3}. 
+    """
+    def reorderList(self, head):
+        stack = []
+        fast = head
+        slow = head
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+        while slow:
+            stack.append(slow)
+            slow = slow.next
+        new = head
+        while new:
+            if stack:
+                end = stack.pop()
+                end.next = new.next
+                new.next = end
+                new = new.next
+            elif new.next:
+                new.next.next = None
+            new = new.next
+        return
+
+
 
     def p(self, function, src, res):
 	print '{0}\nInput: {1}\nOutput {2}\n'.format(function, src, res)
